@@ -1,42 +1,131 @@
-.profile-pic {
-    border-radius: 50%;
-    border: solid #6c6868;
-    z-index: -1;
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    margin: 10px;
+
+
+
+body {
+  background-color: rgb(255, 255, 255);
+  /* Dica: adicione uma imagem de fundo ou gradiente para o blur aparecer melhor */
+  
+  height: 100vh;
+  margin: 0;
 }
 
-.name-container {
-    position: relative;
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
+
+
+* {
+  font-family: 'Roboto Mono', monospace;
+  box-sizing: border-box; /* Importante para o padding não quebrar o layout */
 }
 
-.name-container::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px; /* ajuste o tamanho aqui */
-    height: 60px; /* ajuste o tamanho aqui */
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.35; /* ajuste a opacidade à vontade */
-    z-index: -1; /* garante que fique atrás do texto */
+button, input, textarea, select {
+  font-family: 'Roboto Mono', monospace;
 }
 
-/* Exemplo alternativo: se quiser controlar o círculo via imagem <img> */
-.name-container .profile-pic {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    z-index: -1;
-    opacity: 0.35;
+.menu{
+  /* Substituímos as cores sólidas por cores com transparência (o final 0.4 é a opacidade) */
+  background: linear-gradient(
+    50deg, 
+    rgba(255, 255, 255, 0.4), 
+    rgba(198, 150, 207, 0.3), 
+    rgba(179, 124, 234, 0.2)
+  );
+  
+  /* O Blur faz a mágica de misturar as cores com o fundo da página */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Adicionando uma borda fina para destacar o menu do fundo branco */
+ 
+  
+  /* Garante que o menu tenha altura e os itens fiquem alinhados */
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+
+
+}
+
+.menu-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    /* 1. Correção das propriedades (sem aspas) */
+    font-size: 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+   border-radius: 8px;
+    color: rgb(0, 0, 0);
+    
+    /* 2. Configuração da Transição (Suave) */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    
+    /* 3. Preparação para expansão */
+    transform-origin: center; 
+}
+
+.menu-btn:hover {
+    /* 4. Efeito de Expansão */
+    background-color: rgba(255, 255, 255, 0.3); /* Clareia um pouco mais */
+    transform: scale(1.1); /* O botão cresce 10% */
+    z-index: 10; /* Garante que o botão que cresceu fique por cima dos outros */
+    letter-spacing: 1px; /* O texto expande levemente */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.menu-btn:active {
+    transform: scale(0.95); /* Efeito de apertar ao clicar */
+}
+
+/* Media Query */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        height: auto !important;
+        padding: 20px !important;
+        gap: 20px;
+    }
+
+    nav {
+        width: 100% !important;
+        flex-wrap: wrap;
+        height: auto !important;
+        display: flex; /* Garante que o flex funcione no mobile */
+    }
+
+    .menu-btn {
+        padding: 15px;
+        flex: 1 1 45%; /* Botões ficam lado a lado em pares no mobile */
+        margin: 5px;
+    }
+}
+
+
+
+.profile{
+
+      
+    /* 2. Configuração da Transição (Suave) */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    
+    /* 3. Preparação para expansão */
+    transform-origin: center; 
+
+
+}
+
+
+
+.profile:hover{
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.3); 
+    transform: scale(1.1); /* O botão cresce 10% */
+    z-index: 10; 
+    letter-spacing: 1px; /* O texto expande levemente */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+
+  
 }
