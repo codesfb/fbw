@@ -1,17 +1,5 @@
-function e(tag, attrs = {}, ...children) {
-    const el = document.createElement(tag);
-    const { style, events, ...props } = attrs;
-    if (props) Object.assign(el, props);
-    if (style) Object.assign(el.style, style);
-    if (events) {
-        for (const [name, handler] of Object.entries(events)) {
-            el.addEventListener(name, handler)
-
-        }
-    }
-    el.append(...children);
-    return el;
-}
+import { e } from './src/utils/dom.js';
+import { projectGrid } from './src/components/projectGrid.js';
 
 
 const Header = () => e("header", {
@@ -60,9 +48,9 @@ const Header = () => e("header", {
 
 
     // Lado Direito: Login e Config
-    e('div', {style: { display: 'flex', alignItems: 'center', gap: '15px' } },
-        e('span', { style: { cursor: 'pointer' } }, '🤖 Login'),
-        e('span', { style: { fontSize: '20px', cursor: 'pointer' } }, '⚙️')
+    e('div', {className:'settings',style: { display: 'flex', alignItems: 'center', gap: '15px' } },
+        e('button', { className:'btn-login',style: {border:'none', height:'40px', cursor: 'pointer',borderRadius:'10px', backgroundColor:'black', width:'100px', color:'white' } }, 'Login'),
+        e('img', {src:'img/config.svg',  style: { fontSize: '20px', cursor: 'pointer', width: '20px', height: '20px' } },)
     )
 );
 
@@ -93,7 +81,7 @@ const Footer = () => e('footer', {
 
 const app = e('div', { id: 'app' },
     Header(),
-    //ProjectGrid(),
+    projectGrid(),
     Footer(),
 
 
