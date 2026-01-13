@@ -33,12 +33,12 @@ const Header = () => e("header", {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1",
             padding: '10px 20px',
             borderRadius: '8px',
-            height: "50px",
+            height: "45px",
             
             
         }
     },
-        e('button', { className: 'menu-btn', innerText: 'Projects' }),
+        e('button', { className: 'menu-btn', innerText: 'Projetos',event:{click:} }),
         e('button', { className: 'menu-btn', innerText: 'Contato' }),
         e('button', { className: 'menu-btn', innerText: 'Experiências' }),
         e('button', { className: 'menu-btn', innerText: 'Blog' }),
@@ -49,8 +49,8 @@ const Header = () => e("header", {
 
     // Lado Direito: Login e Config
     e('div', {className:'settings',style: { display: 'flex', alignItems: 'center', gap: '15px' } },
-        e('button', { className:'btn-login',style: {border:'none', height:'40px', cursor: 'pointer',borderRadius:'10px', backgroundColor:'black', width:'100px', color:'white' } }, 'Login'),
-        e('img', {src:'img/config.svg',  style: { fontSize: '20px', cursor: 'pointer', width: '20px', height: '20px' } },)
+        e('button', { className:'btn-login',style: {border:'none', height:'40px', cursor: 'pointer',borderRadius:'10px', width:'100px' } }, 'Login'),
+        e('img', {className:'btn-settings',src:'img/config.svg',  style: { fontSize: '20px', cursor: 'pointer', width: '20px', height: '20px' } },)
     )
 );
 

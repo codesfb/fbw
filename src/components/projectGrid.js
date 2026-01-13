@@ -1,14 +1,14 @@
 import { e } from '../utils/dom.js';
 
 export const projectGrid = () => {
-    const projects = ['Extension App', 'Menu', 'Plugins', 'Extra'];
+    const projects = ['Extension App'];
     return e('main',{ 
         style: {
             padding: '50px',
-            textAlign: 'center'
+            textAlign: 'left'
         }
     },
-        e('h2', { style: { marginBottom: '30px' } }, 'Conteúdo começando pelo portfólio (projects)'),
+        e('h2', { style: { marginBottom: '30px' } }, 'Meus Projetos'),
         e('div', {
             style: {
                 display: 'grid',
@@ -17,14 +17,16 @@ export const projectGrid = () => {
             }
         },
         ...projects.map(name => e('div', {
+            className : 'project-card',
             style: {
                 height: '250px',
-                border: '2px solid #333',
+                width:'180px',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: 'white',
-                borderRadius: '4px'
+                borderRadius: '8px'
             }
         }, name))
         )

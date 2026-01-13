@@ -1,16 +1,9 @@
-
-
-
 body {
   background-color: rgb(255, 255, 255);
-  /* Dica: adicione uma imagem de fundo ou gradiente para o blur aparecer melhor */
-  
-  height: 100vh;
+    height: 100vh;
   margin: 0;
 }
-
-
-
+ 
 * {
   font-family: 'Roboto Mono', monospace;
   box-sizing: border-box; /* Importante para o padding não quebrar o layout */
@@ -103,7 +96,10 @@ button, input, textarea, select {
 }
 
 
+.settings{
+    padding: 15px;
 
+}
 .profile{
 
       
@@ -116,12 +112,38 @@ button, input, textarea, select {
 
 }
 
-.settings:hover{    border-radius: 8px;
+
+.btn-login{
+
+  background: linear-gradient(
+    50deg, 
+    rgba(255, 255, 255, 0.4), 
+    rgba(124, 117, 125, 0.3), 
+    rgba(44, 41, 46, 0.2)
+  );
+
+color:'white';
+border: none;
+
+
+
+}
+
+.btn-login:hover{    border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.3); 
     transform: scale(1.1); /* O botão cresce 10% */
     z-index: 10; 
     letter-spacing: 1px; /* O texto expande levemente */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);}
+
+
+
+.btn-settings:hover{    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.3); 
+    transform: scale(2.0); /* O botão cresce 10% */
+    z-index: 10; 
+    letter-spacing: 1px; /* O texto expande levemente */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);}   
 
 .profile:hover{
     border-radius: 8px;
