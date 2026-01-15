@@ -1,6 +1,6 @@
 import { e } from './src/utils/dom.js';
 import { projectGrid } from './src/components/projectGrid.js';
-
+import { workingPage } from './src/components/waitingPage.js';
 
 const Header = () => e("header", {
     style: {
@@ -10,7 +10,7 @@ const Header = () => e("header", {
         alignItems: 'center',
         padding: '20px 50px',
         backgroundColor: 'white',
-        //boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+       
     }
 },
 
@@ -38,11 +38,22 @@ const Header = () => e("header", {
             
         }
     },
-        e('button', { className: 'menu-btn', innerText: 'Projetos',event:{click:} }),
-        e('button', { className: 'menu-btn', innerText: 'Contato' }),
-        e('button', { className: 'menu-btn', innerText: 'Experiências' }),
-        e('button', { className: 'menu-btn', innerText: 'Blog' }),
-        e('button', { className: 'menu-btn', innerText: 'Sobre' })
+        e('button', { className: 'menu-btn', innerText: 'Projetos', 
+            onclick: () => {console.log('Clicou em Projetos!')
+                           builtContainer(projectGrid()) 
+             }}, ),
+        e('button', { className: 'menu-btn', innerText: 'Contato', onclick: () =>{
+            builtContainer(workingPage());
+        } }),
+        e('button', { className: 'menu-btn', innerText: 'Experiências', onclick: () =>{
+            builtContainer(workingPage());
+        }  }),
+        e('button', { className: 'menu-btn', innerText: 'Blog', onclick: () =>{
+            builtContainer(workingPage());
+        }  }),
+        e('button', { className: 'menu-btn', innerText: 'Sobre', onclick: () =>{
+            builtContainer(workingPage());
+        }  })
     ),
 
 
@@ -73,20 +84,24 @@ const Footer = () => e('footer', {
     )
 );
 
+const mainContent = e('main', { className: 'container', style: { padding: '50px' } });
 
-
-
+function builtContainer(thing){
+    const container = document.querySelector(".container");
+    container.innerHTML = '';
+    container.append(thing)
+}
 
 // --- MONTAGEM DA PÁGINA ---
 
 const app = e('div', { id: 'app' },
     Header(),
-    projectGrid(),
+    mainContent,
     Footer(),
 
 
 );
 
 
-
+mainContent.append(projectGrid())
 document.body.append(app);

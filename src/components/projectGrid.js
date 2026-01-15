@@ -2,7 +2,8 @@ import { e } from '../utils/dom.js';
 
 export const projectGrid = () => {
     const projects = ['Extension App'];
-    return e('main',{ 
+    return e('div',{
+        
         style: {
             padding: '50px',
             textAlign: 'left'
