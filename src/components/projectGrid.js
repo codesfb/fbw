@@ -5,12 +5,26 @@ export const projectGrid = () => {
     const projects = [
         {
             id: 1,
-            name: 'Extension App',
-            info: 'Uma extensão para produtividade no Chrome.',
+            name: 'App menu for browsers',
+            info: 'Uma extensão para produtividade no seu navegador.',
             techs: ['JS', 'CSS', 'HTML'],
             img: 'img/AppMenuForBrowsers.png',
-            links: { github: '#', demo: '#' }
+            links: { github: 'https://github.com/codesfb/AppMenuForBrowsers', demo: '#' }
+        },
+
+          {
+            id: 2,
+            name: 'Clinica medica',
+            info: 'Site frontend que consome uma API RESTful para agendamento de consultas.',
+            techs: ['JS', 'CSS', 'HTML'],
+            img: 'img/clinicaMedica.png',
+            links: { github: 'https://github.com/codesfb/ClinicaM-dica', demo: 'https://codesfb.github.io/ClinicaM-dica/' }
         }
+
+
+
+        
+
     ];
 
     return e('div', {

@@ -79,7 +79,17 @@ const Header = () => e("header", {
 
     // Lado Direito: Login e Config
     e('div', { id: 'settings-options', style: { display: 'flex', alignItems: 'center', gap: '15px' } },
-        e('button', { className: 'btn-login', style: { border: 'none', height: '40px', cursor: 'pointer', borderRadius: '10px', width: '100px' } }, 'Login'),
+
+
+
+        e('button', {
+            className: 'btn-login', style: {
+                border: 'none', height: '40px', cursor: 'pointer', borderRadius: '10px', width: '100px', 
+            }, onclick: () => {
+                    console.log('Clicou em Projetos!')
+                    builtContainer(workingPage());
+                }
+        }, 'Login'),
         e('img', { id: 'gear-icon', src: 'img/gear.svg', style: { fontSize: '20px', cursor: 'pointer', width: '20px', height: '20px' } }),
         e("div", { id: "config-buttons", style: { display: 'none', flexDirection: 'column', gap: '5px' } },
             e("button", {
