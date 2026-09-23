@@ -155,6 +155,26 @@ function menuOptions() {
 
 const app = e('div', { id: 'app' },
     Header(),
+    e('div', {
+        style: {
+            maxWidth: '760px',
+            margin: '18px auto 0',
+            padding: '12px 16px',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 170, 0, 0.35)',
+            background: 'rgba(255, 170, 0, 0.08)',
+            color: '#4a3b00',
+            fontSize: '0.82rem',
+            lineHeight: '1.5',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+        }
+    },
+        e('strong', { style: { fontWeight: '700', letterSpacing: '0.04em' } }, 'ATTENTION:'),
+        e('span', {}, 'this site is very outdated — I did it all with vanilla JavaScript, crazy right? a better version is being developed right now ;)')
+    ),
     mainContent,
     Footer(),
 
