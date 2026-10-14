@@ -1,0 +1,36 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node / Vite
+web/dist/
+node_modules/
+web/.vite/
+
+# Java / Maven
+api/target/
+api/.mvn/wrapper/maven-wrapper.jar
+*.class
+
+# IDEs and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+# geral
+.env
+.idea/
+.vscode/
+*.log
+
+# web
+web/node_modules/
+web/dist/
+
+# api
+api/target/
