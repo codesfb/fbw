@@ -17,10 +17,16 @@ Monorepo do FBW, organizado em aplicação web, API e documentação.
 
 ## Banco de dados local
 
-1. Copie o arquivo de exemplo: `cp .env.example .env`.
-2. Ajuste os valores locais, se necessário.
-3. Inicie o PostgreSQL: `docker compose up -d`.
+1. Copie `.env.example` para `.env` (`Copy-Item .env.example .env` no PowerShell).
+2. Troque `POSTGRES_PASSWORD` por uma senha local sua. `.env` é ignorado pelo Git.
+3. Inicie PostgreSQL e API: `docker compose up --build -d`.
+4. Verifique a API em `http://localhost:8080/health`; a resposta esperada é HTTP 200 com `{"status":"UP"}`.
+
+Para acompanhar a inicialização: `docker compose logs -f api`.
+Para parar os serviços preservando os dados: `docker compose down`.
+
+Também é possível iniciar apenas o banco com `docker compose up -d postgres` e executar a API localmente em `api/` com `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`). Nesse caso, configure `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT` e `API_PORT` no ambiente da IDE/terminal; o Maven não carrega `.env` automaticamente.
 
 ## Desenvolvimento
 
-Depois de inicializar os projetos em `web/` e `api/`, execute os comandos específicos de cada aplicação a partir de suas respectivas pastas.
+Para iniciar o frontend, execute os comandos específicos em `web/`.

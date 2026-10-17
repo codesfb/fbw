@@ -19,5 +19,21 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: ./api
+    container_name: fbw-api
+    restart: unless-stopped
+    environment:
+      API_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-fbw}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-fbw}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Configure POSTGRES_PASSWORD in .env}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
