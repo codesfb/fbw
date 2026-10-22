@@ -1,0 +1,662 @@
+openapi: 3.0.3
+info:
+  title: FBW API
+  version: 0.1.0
+  description: |
+    API contract for the personal website (blog posts and portfolio projects).
+
+    Conventions:
+    - All routes live under `/api`.
+    - Dates use ISO 8601 in UTC (`2026-10-22T14:00:00Z`).
+    - Lists are paginated (`page` starts at 0).
+    - Errors follow RFC 7807 (Problem Details) with `Content-Type: application/problem+json`.
+    - Reading is public; creating, editing and deleting require login (JWT Bearer).
+servers:
+  - url: http://localhost:8080
+    description: Local development
+tags:
+  - name: Posts
+    description: Blog articles
+  - name: Projects
+    description: Portfolio projects
+
+paths:
+  /api/posts:
+    get:
+      tags: [Posts]
+      summary: List posts (paginated)
+      description: |
+        By default only `PUBLISHED` posts are returned. The `DRAFT` and `ALL`
+        values of `status` require authentication.
+      operationId: listPosts
+      security:
+        - {}
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+        - name: tag
+          in: query
+          description: Filter by tag
+          schema:
+            type: string
+            example: java
+        - name: status
+          in: query
+          description: Filter by status (`DRAFT` and `ALL` require login)
+          schema:
+            type: string
+            enum: [PUBLISHED, DRAFT, ALL]
+            default: PUBLISHED
+      responses:
+        '200':
+          description: Page of posts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Posts]
+      summary: Create a post
+      operationId: createPost
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post created
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+                example: /api/posts/slug/my-first-post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/posts/slug/{slug}:
+    get:
+      tags: [Posts]
+      summary: Get a post by slug
+      description: '`DRAFT` posts are only returned to authenticated users; otherwise the response is 404.'
+      operationId: getPostBySlug
+      security:
+        - {}
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200':
+          description: Post found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/posts/{id}:
+    put:
+      tags: [Posts]
+      summary: Update a post (full replacement)
+      operationId: updatePost
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '200':
+          description: Post updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Posts]
+      summary: Delete a post
+      operationId: deletePost
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: Post deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/projects:
+    get:
+      tags: [Projects]
+      summary: List projects (paginated)
+      operationId: listProjects
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+        - name: featured
+          in: query
+          description: When provided, filters by featured projects
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Page of projects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: [Projects]
+      summary: Create a project
+      operationId: createProject
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '201':
+          description: Project created
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+                example: /api/projects/slug/fbw
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/projects/slug/{slug}:
+    get:
+      tags: [Projects]
+      summary: Get a project by slug
+      operationId: getProjectBySlug
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200':
+          description: Project found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/projects/{id}:
+    put:
+      tags: [Projects]
+      summary: Update a project (full replacement)
+      operationId: updateProject
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Projects]
+      summary: Delete a project
+      operationId: deleteProject
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: Project deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      description: Page number (starts at 0)
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    Size:
+      name: size
+      in: query
+      description: Items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 10
+    Id:
+      name: id
+      in: path
+      required: true
+      description: Numeric identifier of the resource
+      schema:
+        type: integer
+        format: int64
+        example: 1
+    Slug:
+      name: slug
+      in: path
+      required: true
+      description: Human-friendly identifier used in the public URL
+      schema:
+        type: string
+        pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        example: my-first-post
+
+  schemas:
+    PostStatus:
+      type: string
+      enum: [DRAFT, PUBLISHED]
+
+    Post:
+      type: object
+      required: [id, slug, title, summary, content, tags, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        slug:
+          type: string
+          example: my-first-post
+        title:
+          type: string
+          example: My first post
+        summary:
+          type: string
+          example: Short summary
+        content:
+          type: string
+          description: Content in Markdown
+          example: '# Markdown here'
+        tags:
+          type: array
+          items:
+            type: string
+          example: [java, spring]
+        status:
+          $ref: '#/components/schemas/PostStatus'
+        publishedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Null while the post is a `DRAFT`
+          example: '2026-10-22T14:00:00Z'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-10-22T13:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-10-22T13:30:00Z'
+
+    PostRequest:
+      type: object
+      required: [title, summary, content, status]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: My first post
+        slug:
+          type: string
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          maxLength: 160
+          description: Optional. If omitted, it is generated from the title.
+          example: my-first-post
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 300
+          example: Short summary
+        content:
+          type: string
+          minLength: 1
+          description: Content in Markdown
+          example: '# Markdown here'
+        tags:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            maxLength: 30
+          default: []
+          example: [java, spring]
+        status:
+          $ref: '#/components/schemas/PostStatus'
+
+    PostPage:
+      type: object
+      required: [items, page, size, totalItems, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 10
+        totalItems:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+
+    Project:
+      type: object
+      required: [id, slug, name, description, techStack, featured]
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        slug:
+          type: string
+          example: fbw
+        name:
+          type: string
+          example: FBW
+        description:
+          type: string
+          example: My personal website
+        repoUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: https://github.com/codesfb/fbw
+        demoUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: null
+        techStack:
+          type: array
+          items:
+            type: string
+          example: [React, TypeScript, Spring Boot]
+        featured:
+          type: boolean
+          example: true
+
+    ProjectRequest:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: FBW
+        slug:
+          type: string
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          maxLength: 110
+          description: Optional. If omitted, it is generated from the name.
+          example: fbw
+        description:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          example: My personal website
+        repoUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: https://github.com/codesfb/fbw
+        demoUrl:
+          type: string
+          format: uri
+          nullable: true
+        techStack:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            maxLength: 30
+          default: []
+          example: [React, TypeScript, Spring Boot]
+        featured:
+          type: boolean
+          default: false
+
+    ProjectPage:
+      type: object
+      required: [items, page, size, totalItems, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 10
+        totalItems:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+
+    Problem:
+      type: object
+      description: Standard error format (RFC 7807 - Problem Details).
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          description: Identifies the error type
+          example: https://fbw.dev/errors/not-found
+        title:
+          type: string
+          description: Short, stable summary of the error type
+          example: Resource not found
+        status:
+          type: integer
+          description: HTTP status code
+          example: 404
+        detail:
+          type: string
+          description: Explanation specific to this occurrence
+          example: Post with slug 'xyz' not found.
+        instance:
+          type: string
+          description: Route that produced the error
+          example: /api/posts/xyz
+
+    FieldError:
+      type: object
+      required: [field, message]
+      properties:
+        field:
+          type: string
+          example: title
+        message:
+          type: string
+          example: must not be blank
+
+    ValidationProblem:
+      description: Problem with the list of invalid fields.
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+
+  responses:
+    BadRequest:
+      description: Invalid request (validation failed or malformed parameters)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ValidationProblem'
+          example:
+            type: https://fbw.dev/errors/validation
+            title: Validation failed
+            status: 400
+            detail: One or more fields are invalid.
+            instance: /api/posts
+            errors:
+              - field: title
+                message: must not be blank
+    Unauthorized:
+      description: Missing, invalid or expired token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://fbw.dev/errors/unauthorized
+            title: Unauthorized
+            status: 401
+            detail: Authentication required.
+            instance: /api/posts
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://fbw.dev/errors/not-found
+            title: Resource not found
+            status: 404
+            detail: Post with slug 'xyz' not found.
+            instance: /api/posts/xyz
+    Conflict:
+      description: Conflict (for example, the slug already exists)
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://fbw.dev/errors/conflict
+            title: Conflict
+            status: 409
+            detail: A resource with slug 'my-first-post' already exists.
+            instance: /api/posts
+    InternalError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://fbw.dev/errors/internal
+            title: Internal server error
+            status: 500
+            detail: An unexpected error occurred.
+            instance: /api/posts
