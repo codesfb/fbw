@@ -1,9 +1,7 @@
 name: web
 on:
   push:
-    paths: ["web/**"]
   pull_request:
-    paths: ["web/**"]
 jobs:
   build:
     runs-on: ubuntu-latest
