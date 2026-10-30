@@ -1,3 +1,3 @@
-# Decisões técnicas
+# Technical Decisions
 
-Registre decisões relevantes, contexto, alternativas consideradas e consequências.
+Record significant decisions, their context, alternatives considered, and consequences.

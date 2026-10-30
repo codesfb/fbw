@@ -1,32 +1,40 @@
 # FBW
 
-Monorepo do FBW, organizado em aplicação web, API e documentação.
+FBW is a monorepo containing a web application, an API, and project documentation.
 
-## Estrutura
+## Repository structure
 
-- `web/` — React + TypeScript, criado com Vite.
-- `api/` — API Spring Boot com Maven.
-- `docs/` — contrato da API, decisões técnicas e ideias futuras.
-- `.github/workflows/` — pipelines de integração contínua.
+- `web/` — React and TypeScript application built with Vite.
+- `api/` — Spring Boot API built with Maven.
+- `docs/` — API contract, technical decisions, future ideas, and project progress.
+- `.github/workflows/` — continuous integration workflows.
 
-## Pré-requisitos
+## Requirements
 
 - Node.js 20+
 - Java 21+
-- Docker e Docker Compose
+- Docker and Docker Compose
 
-## Banco de dados local
+## Local database and API
 
-1. Copie `.env.example` para `.env` (`Copy-Item .env.example .env` no PowerShell).
-2. Troque `POSTGRES_PASSWORD` por uma senha local sua. `.env` é ignorado pelo Git.
-3. Inicie PostgreSQL e API: `docker compose up --build -d`.
-4. Verifique a API em `http://localhost:8080/health`; a resposta esperada é HTTP 200 com `{"status":"UP"}`.
+1. Copy `.env.example` to `.env` (`Copy-Item .env.example .env` in PowerShell).
+2. Set `POSTGRES_PASSWORD` to a local password. `.env` is ignored by Git.
+3. Start PostgreSQL and the API: `docker compose up --build -d`.
+4. Check `http://localhost:8080/health`; the expected response is HTTP 200 with `{"status":"UP"}`.
 
-Para acompanhar a inicialização: `docker compose logs -f api`.
-Para parar os serviços preservando os dados: `docker compose down`.
+Follow startup logs with `docker compose logs -f api`. Stop the services while keeping the data with `docker compose down`.
 
-Também é possível iniciar apenas o banco com `docker compose up -d postgres` e executar a API localmente em `api/` com `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`). Nesse caso, configure `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT` e `API_PORT` no ambiente da IDE/terminal; o Maven não carrega `.env` automaticamente.
+You can also start only the database with `docker compose up -d postgres` and run the API locally from `api/` with `./mvnw spring-boot:run` (Windows: `mvnw.cmd spring-boot:run`). In this case, configure `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`, and `API_PORT` in your IDE or terminal environment. Maven does not load `.env` automatically.
 
-## Desenvolvimento
+## Web development
 
-Para iniciar o frontend, execute os comandos específicos em `web/`.
+Run these commands from `web/`:
+
+```bash
+npm ci
+npm run dev
+npm run lint
+npm run build
+```
+
+The website content and UI are intended to be written in Brazilian Portuguese (`pt-BR`). Repository documentation and agent instructions are maintained in English.

@@ -1,3 +1,3 @@
-# Contrato da API
+# API Contract
 
-Documente aqui endpoints, formatos de requisição e resposta, códigos de erro e autenticação.
+Document endpoints, request and response formats, error codes, and authentication here.

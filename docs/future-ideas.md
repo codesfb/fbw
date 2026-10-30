@@ -1,3 +1,3 @@
-# Ideias futuras
+# Future Ideas
 
-Centralize hipóteses, melhorias e funcionalidades candidatas.
+Keep hypotheses, improvements, and candidate features here.
