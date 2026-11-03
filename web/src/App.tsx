@@ -1,8 +1,17 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { Home } from '@/pages/home/Home'
+
 function App() {
   return (
-    <main className="grid min-h-screen place-items-center bg-white px-6 text-neutral-500">
-      <h1 className="text-sm font-medium tracking-wide">Em desenvolvimento</h1>
-    </main>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/projetos" element={<Home title="Projetos" description="Meus principais projetos e experimentos de software." />} />
+      <Route path="/contato" element={<Home title="Contato" description="Canais para entrarmos em contato e trocarmos ideias." />} />
+      <Route path="/experiencias" element={<Home title="Experiências" description="Minha trajetória profissional, cargos e aprendizados." />} />
+      <Route path="/blog" element={<Home title="Blog" description="Artigos e pensamentos sobre tecnologia e desenvolvimento." />} />
+      <Route path="/sobre" element={<Home title="Sobre" description="Um pouco mais sobre mim, interesses e objetivos." />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
