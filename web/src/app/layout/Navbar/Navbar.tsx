@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Search, Moon, Sun } from 'lucide-react'
+import Button from '@/components/ui/Button'
 
 export type SitePage = 'projetos' | 'contato' | 'experiencias' | 'blog' | 'sobre'
 
@@ -115,15 +116,13 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
             {darkMode ? <Sun className="size-5 text-black" /> : <Moon className="size-5 text-black" />}
           </button>
 
-          <button
-            className="cursor-pointer rounded-lg border border-transparent bg-white/50 px-4 py-1.5 text-sm text-neutral-800 backdrop-blur-xl transition-all duration-300 hover:border-black hover:shadow-[3px_4px_0px_0px_rgba(0,0,0,1)]"
+          <Button
+            size="md"
+            variant="glass"
             onClick={() => onLoginClick?.()}
-            type="button"
           >
-            <span className="border-b-2 border-transparent pb-0.5 transition hover:border-neutral-900">
-              Login
-            </span>
-          </button>
+            Login
+          </Button>
         </div>
       </div>
     </header>
