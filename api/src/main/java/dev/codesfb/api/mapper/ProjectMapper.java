@@ -90,7 +90,7 @@ public class ProjectMapper {
     }
 
     private String resolveUrl(String url) {
-        if (url == null || url.startsWith("http://") || url.startsWith("https://")) {
+        if (url == null || url.star") || url.startsWith("https://")) {
             return url;
         }
         if (url.startsWith("/")) {
