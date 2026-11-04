@@ -6,9 +6,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-fbw}
+      POSTGRES_USER: ${POSTGRES_USER:-fbw}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
@@ -26,14 +26,24 @@ services:
     restart: unless-stopped
     environment:
       API_PORT: 8080
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-fbw}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-fbw}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Configure POSTGRES_PASSWORD in .env}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-fbw}
+      DB_USER: ${POSTGRES_USER:-fbw}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+      MEDIA_DIR: /app/uploads/media
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
     ports:
       - "${API_PORT:-8080}:8080"
+    volumes:
+      - media_data:/app/uploads/media
     depends_on:
       postgres:
         condition: service_healthy
 
 volumes:
   postgres_data:
+  media_data:
