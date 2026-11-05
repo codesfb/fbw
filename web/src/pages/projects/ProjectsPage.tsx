@@ -9,13 +9,13 @@ export function ProjetosPage() {
     <div className="min-h-screen">
       <Navbar />
 
-      <main className="mx-auto max-w-6xl px-4 pt-12 pb-20 sm:px-6">
-        <header className="page-enter mb-8 text-center sm:text-left">
+      <main className="mx-auto max-w-7xl px-4 pt-6 pb-12 sm:px-6">
+        <header className="page-enter mb-4 text-center sm:text-left">
           <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
             Projetos
           </h1>
           <p className="mt-1.5 text-xs text-neutral-500 sm:text-sm">
-            Aplicações web, softwares e ferramentas de código aberto.
+            Aplicações web, softwares, contribuições e ferramentas de código aberto.
           </p>
         </header>
 

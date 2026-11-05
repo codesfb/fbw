@@ -198,7 +198,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                 {title}
               </h3>
               <span
-                className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.2 text-[9px] font-medium ${currentStatus.badgeClass}`}
+                className={`inline-flex shrink-0 items-center gap-1 rounded border px-1.5 py-0.2 text-[9px] font-medium ${currentStatus.badgeClass}`}
               >
                 <span className={`size-1 rounded-full ${currentStatus.dotClass}`} />
                 {currentStatus.label}
