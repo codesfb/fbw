@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Search, Moon, Sun } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import { useTheme } from '@/hooks/useTheme'
 
 export type SitePage = 'projetos' | 'contato' | 'experiencias' | 'blog' | 'sobre'
 
@@ -20,7 +21,7 @@ const links: { label: string; page: SitePage }[] = [
 ]
 
 function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
-  const [darkMode, setDarkMode] = useState(false)
+  const { theme, toggleTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -51,9 +52,12 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
     <header
       className={`sticky top-0 z-30 px-2 pt-2 transition-all duration-300 sm:px-6 ${
         scrolled
-          ? 'bg-white/60 backdrop-blur-xl shadow-[0_1px_0_0_rgba(0,0,0,0.08)]'
-          : 'bg-white'
+          ? 'backdrop-blur-xl shadow-[0_1px_0_0_var(--shadow-secondary)]'
+          : ''
       }`}
+      style={{
+        backgroundColor: scrolled ? 'rgba(var(--bg-elevated-rgb, 255, 255, 255), 0.6)' : 'var(--bg-page)',
+      }}
     >
       <div className="mx-auto flex flex-wrap items-center justify-between gap-2 p-2">
         <button
@@ -63,31 +67,59 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
           type="button"
         >
           <span>
-            <strong className="block text-sm font-semibold text-neutral-900">Fabio Santana</strong>
-            <span className="text-xs text-neutral-500">Software Developer</span>
+            <strong className="block text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+              Fabio Santana
+            </strong>
+            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+              Software Developer
+            </span>
           </span>
         </button>
 
         <nav
           aria-label="Navegação principal"
-          className="order-3 flex w-full items-center justify-center gap-1 rounded-lg border border-transparent bg-white/50 p-1 backdrop-blur-xl transition-all duration-300 hover:border-black hover:shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] sm:order-none sm:w-auto"
+          className="order-3 flex w-full items-center justify-center gap-1 rounded-lg border p-1 backdrop-blur-xl transition-all duration-300 sm:order-none sm:w-auto"
+          style={{
+            backgroundColor: 'var(--bg-elevated)',
+            borderColor: 'var(--border-transparent)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border-primary)'
+            e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border-transparent)'
+            e.currentTarget.style.boxShadow = 'none'
+          }}
         >
           {links.map(({ label, page }) => {
             const isActive = currentPage === page
             return (
               <button
                 aria-current={isActive ? 'page' : undefined}
-                className={`cursor-pointer px-8 py-1 text-xs transition sm:text-sm ${
-                  isActive ? 'text-neutral-500' : 'text-neutral-900 hover:text-neutral-900'
-                }`}
+                className="cursor-pointer px-8 py-1 text-xs transition sm:text-sm"
+                style={{
+                  color: isActive ? 'var(--text-tertiary)' : 'var(--text-primary)',
+                }}
                 key={page}
                 onClick={() => handlePageClick(page)}
                 type="button"
               >
                 <span
-                  className={`border-b-2 pb-0.5 transition ${
-                    isActive ? 'border-neutral-900' : 'border-transparent hover:border-neutral-900'
-                  }`}
+                  className="border-b-2 pb-0.5 transition"
+                  style={{
+                    borderColor: isActive ? 'var(--border-primary)' : 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.borderColor = 'var(--border-primary)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.borderColor = 'transparent'
+                    }
+                  }}
                 >
                   {label}
                 </span>
@@ -97,23 +129,54 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-lg border border-transparent bg-white/50 px-3 py-1.5 backdrop-blur-xl transition-all duration-200 focus-within:border-neutral-300 focus-within:ring-1 focus-within:ring-neutral-300">
-            <Search className="size-5 shrink-0 text-black" />
+          <div
+            className="flex items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-xl transition-all duration-200"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              borderColor: 'var(--border-transparent)',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-secondary)'
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-transparent)'
+            }}
+          >
+            <Search className="size-5 shrink-0" style={{ color: 'var(--icon-primary)' }} />
             <input
               type="text"
               placeholder="Pesquisar..."
-              className="w-28 bg-transparent text-xs text-neutral-700 outline-none placeholder:text-neutral-400 sm:w-36 sm:text-sm"
+              className="w-28 bg-transparent text-xs outline-none sm:w-36 sm:text-sm"
+              style={{
+                color: 'var(--text-secondary)',
+              }}
               readOnly
             />
           </div>
 
           <button
-            aria-label={darkMode ? 'Modo claro' : 'Modo escuro'}
-            className="cursor-pointer rounded-lg border border-transparent bg-white/50 p-2 backdrop-blur-xl transition-all duration-300 hover:border-black hover:shadow-[3px_4px_0px_0px_rgba(0,0,0,1)]"
-            onClick={() => setDarkMode(!darkMode)}
+            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+            className="cursor-pointer rounded-lg border p-2 backdrop-blur-xl transition-all duration-300"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              borderColor: 'var(--border-transparent)',
+            }}
+            onClick={toggleTheme}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-primary)'
+              e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-transparent)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
             type="button"
           >
-            {darkMode ? <Sun className="size-5 text-black" /> : <Moon className="size-5 text-black" />}
+            {theme === 'dark' ? (
+              <Sun className="size-5" style={{ color: 'var(--icon-primary)' }} />
+            ) : (
+              <Moon className="size-5" style={{ color: 'var(--icon-primary)' }} />
+            )}
           </button>
 
           <Button

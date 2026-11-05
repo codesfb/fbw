@@ -46,46 +46,97 @@ export function ProjectModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/40"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+      style={{ backgroundColor: 'var(--bg-modal-overlay)' }}
       onClick={onClose}
     >
       <div
-        className="relative max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-xl border border-black bg-white font-mono shadow-[6px_7px_0px_0px_rgba(0,0,0,1)] flex flex-col"
+        className="relative max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-xl border font-mono flex flex-col"
+        style={{
+          backgroundColor: 'var(--bg-elevated-solid)',
+          borderColor: 'var(--border-primary)',
+          boxShadow: 'var(--shadow-modal)',
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cabeçalho do modal */}
-        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5 bg-neutral-50/50">
+        <div
+          className="flex items-center justify-between border-b px-5 py-3.5"
+          style={{
+            backgroundColor: 'var(--bg-secondary)',
+            borderColor: 'var(--border-tertiary)',
+          }}
+        >
           <div className="flex items-center gap-2">
-            <BookOpen className="size-4 text-black" />
-            <h2 id="modal-title" className="text-sm font-bold text-neutral-900 line-clamp-1">
+            <BookOpen className="size-4" style={{ color: 'var(--icon-primary)' }} />
+            <h2 id="modal-title" className="text-sm font-bold line-clamp-1" style={{ color: 'var(--text-primary)' }}>
               {title} — Detalhes
             </h2>
           </div>
           <button
             onClick={onClose}
             aria-label="Fechar modal"
-            className="cursor-pointer rounded-md border border-transparent p-1 text-neutral-500 hover:border-black hover:text-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+            className="cursor-pointer rounded-md border p-1 transition-all"
+            style={{
+              borderColor: 'var(--border-transparent)',
+              color: 'var(--text-tertiary)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-primary)'
+              e.currentTarget.style.color = 'var(--text-primary)'
+              e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-transparent)'
+              e.currentTarget.style.color = 'var(--text-tertiary)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Conteúdo / README */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 text-xs sm:text-sm text-neutral-700 leading-relaxed space-y-4">
-          <div className="rounded-lg border border-neutral-200 bg-neutral-50/60 p-4 whitespace-pre-wrap font-mono">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 text-xs sm:text-sm leading-relaxed space-y-4" style={{ color: 'var(--text-secondary)' }}>
+          <div
+            className="rounded-lg border p-4 whitespace-pre-wrap font-mono"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              borderColor: 'var(--border-tertiary)',
+            }}
+          >
             {content}
           </div>
         </div>
 
         {/* Rodapé com ações */}
-        <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-3 bg-neutral-50/50">
+        <div
+          className="flex items-center justify-between border-t px-5 py-3"
+          style={{
+            backgroundColor: 'var(--bg-secondary)',
+            borderColor: 'var(--border-tertiary)',
+          }}
+        >
           <div className="flex gap-2">
             {repoUrl && (
               <a
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-transparent bg-white px-3 py-1.5 text-xs text-neutral-800 transition-all duration-200 hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-elevated-solid)',
+                  borderColor: 'var(--border-transparent)',
+                  color: 'var(--text-primary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-primary)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 <Code2 className="size-3.5" />
                 Repositório
@@ -96,7 +147,20 @@ export function ProjectModal({
                 href={siteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-transparent bg-white px-3 py-1.5 text-xs text-neutral-800 transition-all duration-200 hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-elevated-solid)',
+                  borderColor: 'var(--border-transparent)',
+                  color: 'var(--text-primary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-primary)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 <ExternalLink className="size-3.5" />
                 Site
@@ -107,7 +171,20 @@ export function ProjectModal({
           <button
             onClick={onClose}
             type="button"
-            className="cursor-pointer rounded-lg border border-transparent bg-white px-4 py-1.5 text-xs text-neutral-800 transition-all duration-200 hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            className="cursor-pointer rounded-lg border px-4 py-1.5 text-xs transition-all duration-200"
+            style={{
+              backgroundColor: 'var(--bg-elevated-solid)',
+              borderColor: 'var(--border-transparent)',
+              color: 'var(--text-primary)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-primary)'
+              e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-transparent)'
+              e.currentTarget.style.boxShadow = 'none'
+            }}
           >
             Fechar
           </button>

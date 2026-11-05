@@ -8,6 +8,7 @@ export interface UseProjectsResult {
   error: Error | null
   isFallback: boolean
   refetch: () => Promise<void>
+  syncStatus: 'synced' | 'fallback' | 'error'
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
@@ -17,6 +18,7 @@ export function useProjects(): UseProjectsResult {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error | null>(null)
   const [isFallback, setIsFallback] = useState<boolean>(true)
+  const [syncStatus, setSyncStatus] = useState<'synced' | 'fallback' | 'error'>('fallback')
 
   const loadData = useCallback(async (isInitial = false) => {
     if (!isInitial) {
@@ -41,10 +43,12 @@ export function useProjects(): UseProjectsResult {
         if (data.length === 0) {
           setProjects(mockProjects)
           setIsFallback(true)
+          setSyncStatus('fallback')
         } else {
           // API retornou dados reais
           setProjects(data)
           setIsFallback(false)
+          setSyncStatus('synced')
         }
         setError(null)
       } else {
@@ -55,6 +59,7 @@ export function useProjects(): UseProjectsResult {
       setError(err instanceof Error ? err : new Error('Falha ao comunicar com a API'))
       setProjects(mockProjects)
       setIsFallback(true)
+      setSyncStatus('error')
     } finally {
       setLoading(false)
     }
@@ -83,10 +88,12 @@ export function useProjects(): UseProjectsResult {
           if (data.length === 0) {
             setProjects(mockProjects)
             setIsFallback(true)
+            setSyncStatus('fallback')
           } else {
             // API retornou dados reais
             setProjects(data)
             setIsFallback(false)
+            setSyncStatus('synced')
           }
           setError(null)
         } else {
@@ -98,6 +105,7 @@ export function useProjects(): UseProjectsResult {
         setError(err instanceof Error ? err : new Error('Falha ao comunicar com a API'))
         setProjects(mockProjects)
         setIsFallback(true)
+        setSyncStatus('error')
       } finally {
         if (!ignore) {
           setLoading(false)
@@ -118,6 +126,7 @@ export function useProjects(): UseProjectsResult {
     error,
     isFallback,
     refetch: () => loadData(false),
+    syncStatus,
   }
 }
 

@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, type ReactNode } from 'react'
+import { forwardRef, useRef, useState, type ReactNode, type CSSProperties } from 'react'
 import {
   Code2,
   ExternalLink,
@@ -38,22 +38,28 @@ export interface ProjectCardProps {
 
 const statusConfig: Record<
   ProjectStatus,
-  { label: string; dotClass: string; badgeClass: string }
+  { label: string; dotVar: string; bgVar: string; borderVar: string; textVar: string }
 > = {
   concluido: {
     label: 'Concluído',
-    dotClass: 'bg-emerald-500',
-    badgeClass: 'border-emerald-600/30 bg-emerald-50 text-emerald-800',
+    dotVar: '--status-success',
+    bgVar: '--status-success-bg',
+    borderVar: '--status-success-border',
+    textVar: '--status-success-text',
   },
   'em-andamento': {
     label: 'Em andamento',
-    dotClass: 'bg-amber-500',
-    badgeClass: 'border-amber-600/30 bg-amber-50 text-amber-800',
+    dotVar: '--status-warning',
+    bgVar: '--status-warning-bg',
+    borderVar: '--status-warning-border',
+    textVar: '--status-warning-text',
   },
   arquivado: {
     label: 'Arquivado',
-    dotClass: 'bg-neutral-400',
-    badgeClass: 'border-neutral-400/30 bg-neutral-100 text-neutral-600',
+    dotVar: '--status-archived',
+    bgVar: '--status-archived-bg',
+    borderVar: '--status-archived-border',
+    textVar: '--status-archived-text',
   },
 }
 
@@ -114,10 +120,16 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
     const videoRef = useRef<HTMLVideoElement>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const currentStatus = statusConfig[status] ?? statusConfig.arquivado
+    
+    const cardRef = useRef<HTMLElement>(null)
 
     const handleMouseEnter = () => {
       if (videoRef.current) {
         videoRef.current.play().catch(() => {})
+      }
+      if (cardRef.current) {
+        cardRef.current.style.borderColor = 'var(--border-primary)'
+        cardRef.current.style.boxShadow = 'var(--shadow-hover)'
       }
     }
 
@@ -126,24 +138,52 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
         videoRef.current.pause()
         videoRef.current.currentTime = 0
       }
+      if (cardRef.current && !featured) {
+        cardRef.current.style.borderColor = 'var(--border-secondary)'
+        cardRef.current.style.boxShadow = 'var(--shadow-card)'
+      }
+    }
+
+    const cardStyle: CSSProperties = {
+      backgroundColor: 'var(--bg-card)',
+      borderColor: featured ? 'var(--border-primary)' : 'var(--border-secondary)',
+      boxShadow: featured ? 'var(--shadow-hover)' : 'var(--shadow-card)',
     }
 
     return (
       <>
         <article
-          ref={ref}
+          ref={(node) => {
+            cardRef.current = node
+            if (typeof ref === 'function') {
+              ref(node)
+            } else if (ref) {
+              ref.current = node
+            }
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`group flex flex-col overflow-hidden rounded-lg border bg-white/50 font-mono backdrop-blur-xl transition-all duration-300 hover:border-black hover:shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] ${
-            featured
-              ? 'border-neutral-900 shadow-[3px_4px_0px_0px_rgba(0,0,0,1)]'
-              : 'border-transparent not-hover:border-neutral-300/80 not-hover:shadow-[2px_3px_0px_0px_rgba(0,0,0,0.15)]'
-          } ${className}`}
+          className={`group flex flex-col overflow-hidden rounded-lg border font-mono backdrop-blur-xl transition-all duration-300 ${className}`}
+          style={cardStyle}
         >
           {/* Mídia (16:9) */}
-          <div className="relative aspect-video w-full overflow-hidden border-b border-neutral-200/80 bg-neutral-100/60">
+          <div
+            className="relative aspect-video w-full overflow-hidden border-b"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              borderColor: 'var(--border-tertiary)',
+            }}
+          >
             {featured && (
-              <span className="absolute top-2 left-2 z-10 rounded border border-black bg-white px-1.5 py-0.5 text-[9px] font-bold text-black shadow-[1px_2px_0px_0px_rgba(0,0,0,1)]">
+              <span
+                className="absolute top-2 left-2 z-10 rounded border px-1.5 py-0.5 text-[9px] font-bold"
+                style={{
+                  backgroundColor: 'var(--bg-elevated-solid)',
+                  borderColor: 'var(--border-primary)',
+                  color: 'var(--text-primary)',
+                  boxShadow: 'var(--shadow-hover-sm)',
+                }}
+              >
                 Destaque
               </span>
             )}
@@ -170,8 +210,13 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
             )}
 
             {!media && (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-200/60">
-                <Layers className="size-7 text-neutral-400 stroke-[1.5]" />
+              <div
+                className="flex h-full w-full items-center justify-center"
+                style={{
+                  background: `linear-gradient(to bottom right, var(${currentStatus.bgVar}), var(--bg-secondary), var(--bg-tertiary))`,
+                }}
+              >
+                <Layers className="size-7 stroke-[1.5]" style={{ color: 'var(--icon-tertiary)' }} />
               </div>
             )}
 
@@ -182,10 +227,16 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Visitar site oficial"
-                className="group/visit absolute right-2 bottom-2 z-10 inline-flex items-center gap-1 rounded border border-black bg-white/95 px-2 py-0.5 text-[10px] font-medium text-neutral-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] backdrop-blur-sm transition-all hover:bg-white hover:-translate-y-0.5"
+                className="group/visit absolute right-2 bottom-2 z-10 inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm transition-all hover:-translate-y-0.5"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  borderColor: 'var(--border-primary)',
+                  color: 'var(--text-primary)',
+                  boxShadow: 'var(--shadow-hover-sm)',
+                }}
               >
                 <span>Visitar</span>
-                <ExternalLink className="size-2.5 text-neutral-700 transition-transform group-hover/visit:translate-x-0.5" />
+                <ExternalLink className="size-2.5 transition-transform group-hover/visit:translate-x-0.5" style={{ color: 'var(--text-secondary)' }} />
               </a>
             )}
           </div>
@@ -194,19 +245,24 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
           <div className="flex flex-1 flex-col p-3">
             {/* Título e Status */}
             <div className="mb-1 flex items-start justify-between gap-1.5">
-              <h3 className="text-xs font-bold tracking-tight text-neutral-900 line-clamp-1 sm:text-sm">
+              <h3 className="text-xs font-bold tracking-tight line-clamp-1 sm:text-sm" style={{ color: 'var(--text-primary)' }}>
                 {title}
               </h3>
               <span
-                className={`inline-flex shrink-0 items-center gap-1 rounded border px-1.5 py-0.2 text-[9px] font-medium ${currentStatus.badgeClass}`}
+                className="inline-flex shrink-0 items-center gap-1 rounded border px-1.5 py-0.2 text-[9px] font-medium"
+                style={{
+                  backgroundColor: `var(${currentStatus.bgVar})`,
+                  borderColor: `var(${currentStatus.borderVar})`,
+                  color: `var(${currentStatus.textVar})`,
+                }}
               >
-                <span className={`size-1 rounded-full ${currentStatus.dotClass}`} />
+                <span className="size-1 rounded-full" style={{ backgroundColor: `var(${currentStatus.dotVar})` }} />
                 {currentStatus.label}
               </span>
             </div>
 
             {/* Descrição em 2 linhas */}
-            <p className="mb-2 text-[11px] leading-relaxed text-neutral-600 line-clamp-2">
+            <p className="mb-2 text-[11px] leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
               {description}
             </p>
 
@@ -215,7 +271,12 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               {languages.map((lang) => (
                 <span
                   key={lang}
-                  className="inline-flex items-center gap-1 rounded border border-neutral-300 bg-white/80 px-1.5 py-0.5 text-[9px] text-neutral-800"
+                  className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[9px]"
+                  style={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    borderColor: 'var(--border-secondary)',
+                    color: 'var(--text-primary)',
+                  }}
                 >
                   {getLanguageIcon(lang)}
                   {lang}
@@ -224,7 +285,11 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded border border-dashed border-neutral-300 px-1.5 py-0.5 text-[9px] text-neutral-500"
+                  className="rounded border border-dashed px-1.5 py-0.5 text-[9px]"
+                  style={{
+                    borderColor: 'var(--border-secondary)',
+                    color: 'var(--text-tertiary)',
+                  }}
                 >
                   #{tag}
                 </span>
@@ -232,15 +297,28 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
             </div>
 
             {/* Ações / Botões */}
-            <div className="flex flex-wrap items-center gap-1.5 border-t border-neutral-200/80 pt-2">
+            <div className="flex flex-wrap items-center gap-1.5 border-t pt-2" style={{ borderColor: 'var(--border-tertiary)' }}>
               <a
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/btn inline-flex items-center gap-1 rounded border border-transparent bg-white/70 px-2 py-0.5 text-[10px] text-neutral-800 transition-all hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="group/btn inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  borderColor: 'var(--border-transparent)',
+                  color: 'var(--text-primary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-primary)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 <Code2 className="size-3" />
-                <span className="border-b border-transparent group-hover/btn:border-black">
+                <span className="border-b border-transparent group-hover/btn:border-[var(--border-primary)]">
                   Repositório
                 </span>
               </a>
@@ -250,10 +328,23 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                   href={downloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/btn inline-flex items-center gap-1 rounded border border-transparent bg-white/70 px-2 py-0.5 text-[10px] text-neutral-800 transition-all hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                  className="group/btn inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
+                  style={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    borderColor: 'var(--border-transparent)',
+                    color: 'var(--text-primary)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-primary)'
+                    e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                    e.currentTarget.style.boxShadow = 'none'
+                  }}
                 >
                   <Download className="size-3" />
-                  <span className="border-b border-transparent group-hover/btn:border-black">
+                  <span className="border-b border-transparent group-hover/btn:border-[var(--border-primary)]">
                     Baixar
                   </span>
                 </a>
@@ -263,17 +354,30 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="group/btn cursor-pointer inline-flex items-center gap-1 rounded border border-transparent bg-white/70 px-2 py-0.5 text-[10px] text-neutral-800 transition-all hover:border-black hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="group/btn cursor-pointer inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  borderColor: 'var(--border-transparent)',
+                  color: 'var(--text-primary)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-primary)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                  e.currentTarget.style.boxShadow = 'none'
+                }}
               >
                 <BookOpen className="size-3" />
-                <span className="border-b border-transparent group-hover/btn:border-black">
+                <span className="border-b border-transparent group-hover/btn:border-[var(--border-primary)]">
                   Ler mais
                 </span>
               </button>
             </div>
 
             {/* Rodapé: Data de Modificação */}
-            <div className="mt-2 border-t border-neutral-100 pt-1.5 text-[9px] text-neutral-400">
+            <div className="mt-2 border-t pt-1.5 text-[9px]" style={{ borderColor: 'var(--border-tertiary)', color: 'var(--text-quaternary)' }}>
               Atualizado em {formatUpdatedDate(updatedAt)}
             </div>
           </div>
