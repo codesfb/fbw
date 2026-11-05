@@ -57,7 +57,7 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
         backgroundColor: 'var(--bg-page)',
       }}
     >
-      <div className="mx-auto flex flex-wrap items-center justify-between gap-2 p-2">
+      <div className="mx-auto flex flex-col gap-2 p-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <button
           aria-label="Ir para a página inicial"
           className="flex cursor-pointer items-center gap-3 text-left transition-opacity hover:opacity-80"
@@ -76,7 +76,7 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
 
         <nav
           aria-label="Navegação principal"
-          className="order-3 flex w-full items-center justify-center gap-1 rounded-lg border p-1 backdrop-blur-xl transition-all duration-300 sm:order-none sm:w-auto"
+          className="order-3 flex w-full items-center justify-center gap-1 overflow-x-auto rounded-lg border p-1 backdrop-blur-xl transition-all duration-300 sm:order-none sm:w-auto"
           style={{
             backgroundColor: 'var(--bg-elevated)',
             borderColor: 'var(--border-transparent)',
@@ -95,7 +95,7 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
             return (
               <button
                 aria-current={isActive ? 'page' : undefined}
-                className="cursor-pointer px-8 py-1 text-xs transition sm:text-sm"
+                className="cursor-pointer px-2 py-1 text-[10px] transition sm:px-8 sm:text-xs"
                 style={{
                   color: isActive ? 'var(--text-tertiary)' : 'var(--text-primary)',
                 }}
@@ -126,9 +126,9 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
           <div
-            className="flex items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-xl transition-all duration-200"
+            className="hidden items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-xl transition-all duration-200 sm:flex"
             style={{
               backgroundColor: 'var(--bg-elevated)',
               borderColor: 'var(--border-transparent)',
@@ -180,6 +180,7 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
           <Button
             size="md"
             variant="glass"
+            className="hidden sm:inline-flex"
             onClick={() => onLoginClick?.()}
           >
             Login
