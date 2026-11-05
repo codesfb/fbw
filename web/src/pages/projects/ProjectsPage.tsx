@@ -1,5 +1,5 @@
 import Navbar from '@/app/layout/Navbar/Navbar'
-import ProjectCard from '@/components/ui/Card/ProjectCard'
+import ProjectCard from '@/pages/projects/components/Card/ProjectCard'
 import { useProjects } from '@/hooks/useProjects'
 
 export function ProjetosPage() {

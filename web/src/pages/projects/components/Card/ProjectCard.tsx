@@ -13,7 +13,7 @@ import {
   Server,
   FileText,
 } from 'lucide-react'
-import ProjectModal from '../Modal/ProjectModal'
+import ProjectModal from '../../../../components/ui/Modal/ProjectModal'
 
 export type ProjectStatus = 'concluido' | 'em-andamento' | 'arquivado'
 

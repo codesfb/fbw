@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Home } from '@/pages/home/Home'
-import { ProjetosPage } from '@/pages/projetos/ProjetosPage'
+import { ProjetosPage } from '@/pages/projects/ProjectsPage'
 
 function App() {
   return (

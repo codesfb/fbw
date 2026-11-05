@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { ProjectCardProps } from '@/components/ui/Card/ProjectCard'
+import type { ProjectCardProps } from '@/pages/projects/components/Card/ProjectCard'
 import { mockProjects } from '@/data/projects'
 
 export interface UseProjectsResult {
