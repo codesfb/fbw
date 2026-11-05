@@ -51,12 +51,10 @@ function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
   return (
     <header
       className={`sticky top-0 z-30 px-2 pt-2 transition-all duration-300 sm:px-6 ${
-        scrolled
-          ? 'backdrop-blur-xl shadow-[0_1px_0_0_var(--shadow-secondary)]'
-          : ''
+        scrolled ? 'backdrop-blur-xl shadow-[0_1px_0_0_var(--shadow-secondary)]' : ''
       }`}
       style={{
-        backgroundColor: scrolled ? 'rgba(var(--bg-elevated-rgb, 255, 255, 255), 0.6)' : 'var(--bg-page)',
+        backgroundColor: 'var(--bg-page)',
       }}
     >
       <div className="mx-auto flex flex-wrap items-center justify-between gap-2 p-2">

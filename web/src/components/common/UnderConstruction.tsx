@@ -10,20 +10,20 @@ export function UnderConstruction({
   description = 'Uma versão melhor está sendo desenvolvida agora mesmo.',
 }: UnderConstructionProps) {
   return (
-    <main className="mx-auto max-w-3xl px-6 pt-32 pb-20">
+    <main className="mx-auto max-w-3xl px-6 pt-20 pb-12">
       <div className="page-enter flex flex-col items-center text-center">
         <div
-          className="mb-8 rounded-lg border p-4"
+          className="mb-6 rounded-lg border p-3"
           style={{
             backgroundColor: 'var(--bg-elevated-solid)',
             borderColor: 'var(--border-primary)',
             boxShadow: 'var(--shadow-hover)',
           }}
         >
-          <Construction className="size-10" style={{ color: 'var(--icon-primary)' }} />
+          <Construction className="size-8" style={{ color: 'var(--icon-primary)' }} />
         </div>
 
-        <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-5xl" style={{ color: 'var(--text-primary)' }}>
+        <h1 className="mb-3 text-2xl font-bold tracking-tight sm:text-4xl" style={{ color: 'var(--text-primary)' }}>
           {pageName ? `${pageName} em construção` : 'Em construção'}
         </h1>
 
@@ -31,11 +31,11 @@ export function UnderConstruction({
           {description}
         </p>
 
-        <p className="mb-10 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
+        <p className="mb-8 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
           Volte em breve para ver o resultado.
         </p>
 
-        <div className="mb-16 flex flex-wrap justify-center gap-4">
+        <div className="mb-12 flex flex-wrap justify-center gap-4">
           <a
             href="https://github.com/fabiosantanarp"
             target="_blank"
