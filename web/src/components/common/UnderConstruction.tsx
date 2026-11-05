@@ -1,4 +1,5 @@
-import { Construction, ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
+import { ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
+import Mascote from '@/components/Mascote/Mascote'
 
 type UnderConstructionProps = {
   pageName?: string
@@ -7,24 +8,58 @@ type UnderConstructionProps = {
 
 export function UnderConstruction({
   pageName,
-  description = 'Uma versão melhor está sendo desenvolvida agora mesmo.',
+  description = 'A better version is being developed right now.',
 }: UnderConstructionProps) {
   return (
     <main className="mx-auto max-w-3xl px-6 pt-20 pb-12">
-      <div className="page-enter flex flex-col items-center text-center">
+      <div className="flex flex-col items-center text-center">
         <div
-          className="mb-6 rounded-lg border p-3"
+          className="page-enter"
           style={{
-            backgroundColor: 'var(--bg-elevated-solid)',
-            borderColor: 'var(--border-primary)',
-            boxShadow: 'var(--shadow-hover)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 12,
+            marginBottom: 20,
+            transform: 'scale(0.82)',
+            transformOrigin: 'center',
           }}
         >
-          <Construction className="size-8" style={{ color: 'var(--icon-primary)' }} />
+          <Mascote estado="trabalhando" tamanho={120} />
+          <div
+            aria-hidden="true"
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              border: '5px solid var(--mascote-b)',
+              background: 'var(--bg-secondary)',
+              boxShadow: 'inset 0 0 0 4px var(--bg-tertiary)',
+              animation: 'construcao-engrenagem 3s linear infinite',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 15,
+                borderRadius: '50%',
+                border: '4px solid var(--mascote-y)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 6,
+                borderRadius: '50%',
+                border: '2px solid var(--mascote-r)',
+              }}
+            />
+          </div>
         </div>
 
         <h1 className="mb-3 text-2xl font-bold tracking-tight sm:text-4xl" style={{ color: 'var(--text-primary)' }}>
-          {pageName ? `${pageName} em construção` : 'Em construção'}
+          {pageName ? `${pageName} under construction` : 'Under construction'}
         </h1>
 
         <p className="mb-2 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
@@ -32,7 +67,7 @@ export function UnderConstruction({
         </p>
 
         <p className="mb-8 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
-          Volte em breve para ver o resultado.
+          Come back soon to see the result.
         </p>
 
         <div className="mb-12 flex flex-wrap justify-center gap-4">
@@ -102,14 +137,14 @@ export function UnderConstruction({
             }}
           >
             <Mail className="size-4" style={{ color: 'var(--icon-primary)' }} />
-            Contato
+            Contact
             <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--icon-tertiary)' }} />
           </a>
         </div>
 
         <div className="w-full border-t pt-10" style={{ borderColor: 'var(--border-tertiary)' }}>
           <p className="text-xs" style={{ color: 'var(--text-quaternary)' }}>
-            &copy; 2026 Fabio Santana. Desenvolvido com React, TypeScript &amp; Tailwind.
+            &copy; 2026 Fabio Santana. Built with React, TypeScript &amp; Tailwind.
           </p>
         </div>
       </div>
