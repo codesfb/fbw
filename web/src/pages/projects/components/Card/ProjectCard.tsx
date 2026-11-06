@@ -229,10 +229,18 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                 title="Visitar site oficial"
                 className="group/visit absolute right-2 bottom-2 z-10 inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm transition-all hover:-translate-y-0.5"
                 style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  borderColor: 'var(--border-primary)',
+                  backgroundColor: 'var(--bg-elevated-solid)',
+                  borderColor: 'var(--border-transparent)',
                   color: 'var(--text-primary)',
-                  boxShadow: 'var(--shadow-hover-sm)',
+                  boxShadow: 'none',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-primary)'
+                  e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-transparent)'
+                  e.currentTarget.style.boxShadow = 'none'
                 }}
               >
                 <span>Visitar</span>
