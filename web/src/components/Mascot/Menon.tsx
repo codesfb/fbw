@@ -1,4 +1,4 @@
-import './Mascote.css'
+import './Menon.css'
 
 type MascoteEstado = 'idle' | 'dormindo' | 'trabalhando' | 'falando' | 'pensando'
 
@@ -26,7 +26,8 @@ const CORES: Record<string, string> = {
   R: 'var(--mascote-r)', // luz da antena
   C: 'var(--mascote-c)', // luz do peito
   Y: 'var(--mascote-y)', // amarelo
-  O: 'var(--mascote-o)', // madeira / detalhes
+  O: 'var(--mascote-o)',
+  F: 'var(--mascote-f)', // madeira / detalhes
   G: 'var(--mascote-g)', // cinza
 }
 
@@ -58,9 +59,9 @@ const GRADE = [
   '...KGK.KBBBCCBBBK.KGK...',
   '...KGK.KBBBBBBBBK.KGK...',
   '...KKK.KYYYYYYYYK.KKK...',
-  '.......KOBBBBBBOK.......',
+  '.......KFBBBBBBFK.......',
   '.......KKKKKKKKKK.......',
-  '........KOK..KOK........',
+  '........KFK..KFK........',
   '........KGK..KGK........',
   '.......KGGK..KGGK.......',
   '.......KKKK..KKKK.......',
@@ -86,6 +87,9 @@ const ROCHA = [
 
 // Fagulhas [x, y, cor]
 const FAGULHAS = [[24, 26, 'Y'], [27, 25, 'Y'], [28, 27, 'G'], [26, 24, 'Y']]
+
+// Pálpebras fechadas: linha do meio de cada olho (linha 11) [x, y, largura]
+const PALPEBRAS = [[8, 11, 2], [14, 11, 2]]
 
 const COLUNAS = GRADE[0].length
 const LINHAS = GRADE.length
@@ -161,6 +165,12 @@ export default function Mascote({ estado = 'idle', tamanho = 140, className = ''
             <Blocos lista={BLOCOS.filter((b: Bloco) => b.c === letra)} />
           </g>
         ))}
+
+        <g className="palpebras">
+          {PALPEBRAS.map(([x, y, w], i) => (
+            <rect key={i} x={x} y={y} width={w} height={1} fill="var(--mascote-k)" />
+          ))}
+        </g>
 
         <g className="braco-dir">
           <Blocos lista={BLOCOS.filter((b: Bloco) => ehBracoDir(b))} />

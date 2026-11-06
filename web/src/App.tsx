@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Home } from '@/pages/home/Home'
 import { ProjetosPage } from '@/pages/projects/ProjectsPage'
-import PaginaConstrucao from '@/components/Mascote/PaginaConstrucao'
-import Mascote from '@/components/Mascote/Mascote'
+import PaginaConstrucao from '@/components/Mascot/MenonUnderConstruction'
+import Mascote from '@/components/Mascot/Menon'
 
 function App() {
   const location = useLocation()

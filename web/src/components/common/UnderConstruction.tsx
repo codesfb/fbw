@@ -1,5 +1,5 @@
 import { ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
-import Mascote from '@/components/Mascote/Mascote'
+import Mascote from '@/components/Mascot/Menon'
 
 type UnderConstructionProps = {
   pageName?: string
@@ -11,7 +11,7 @@ export function UnderConstruction({
   description = 'A better version is being developed right now.',
 }: UnderConstructionProps) {
   return (
-    <main className="mx-auto max-w-3xl px-6 pt-20 pb-12">
+    <main className="mx-auto max-w-3xl px-6 pt-15 pb-12">
       <div className="flex flex-col items-center text-center">
         <div
           className="page-enter"
@@ -25,50 +25,23 @@ export function UnderConstruction({
             transformOrigin: 'center',
           }}
         >
-          <Mascote estado="trabalhando" tamanho={120} />
-          <div
-            aria-hidden="true"
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: '50%',
-              border: '5px solid var(--mascote-b)',
-              background: 'var(--bg-secondary)',
-              boxShadow: 'inset 0 0 0 4px var(--bg-tertiary)',
-              animation: 'construcao-engrenagem 3s linear infinite',
-              position: 'relative',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                inset: 15,
-                borderRadius: '50%',
-                border: '4px solid var(--mascote-y)',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 6,
-                borderRadius: '50%',
-                border: '2px solid var(--mascote-r)',
-              }}
-            />
-          </div>
+          <Mascote estado="trabalhando" tamanho={70} />
+         
         </div>
 
         <h1 className="mb-3 text-2xl font-bold tracking-tight sm:text-4xl" style={{ color: 'var(--text-primary)' }}>
-          {pageName ? `${pageName} under construction` : 'Under construction'}
+          {pageName ? `${pageName} em construção` : 'Under construction'}
         </h1>
+
+      <p className="mb-8 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
+          Volte e veja o resultado depois.
+        </p>
 
         <p className="mb-2 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
           {description}
         </p>
 
-        <p className="mb-8 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
-          Come back soon to see the result.
-        </p>
+        
 
         <div className="mb-12 flex flex-wrap justify-center gap-4">
           <a
@@ -144,7 +117,7 @@ export function UnderConstruction({
 
         <div className="w-full border-t pt-10" style={{ borderColor: 'var(--border-tertiary)' }}>
           <p className="text-xs" style={{ color: 'var(--text-quaternary)' }}>
-            &copy; 2026 Fabio Santana. Built with React, TypeScript &amp; Tailwind.
+            &copy; 2026 Built by Fabio Santana.
           </p>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import Mascote from './Mascote'
-import './PaginaConstrucao.css'
+import Mascote from './Menon'
+import './MenonUnderConstruction.css'
 
 interface PaginaConstrucaoProps {
   titulo?: string

@@ -4,7 +4,6 @@
   flex-direction: column;
   align-items: center;
   user-select: none;
-  --mascote-zzz: var(--mascote-zzz);
 }
 
 .mascote svg:not(.mascote__z) {
@@ -27,6 +26,12 @@
   transform-box: fill-box;
   transform-origin: center;
   animation: mascote-piscar 4s infinite;
+}
+
+/* pálpebras (linha que aparece quando os olhos fecham) */
+.mascote .palpebras {
+  opacity: 0;
+  animation: mascote-palpebra 4s infinite;
 }
 
 /* luzes */
@@ -53,7 +58,11 @@
 }
 .mascote--dormindo .olhos {
   animation: none;
-  transform: scaleY(0.18); /* olhos fechados */
+  transform: scaleY(0); /* olhos fechados */
+}
+.mascote--dormindo .palpebras {
+  animation: none;
+  opacity: 1;
 }
 .mascote--dormindo .antena-luz { animation: mascote-luz-sono 3.6s ease-in-out infinite; }
 .mascote--dormindo .luz-peito  { animation: mascote-luz-sono 3.6s ease-in-out infinite; }
@@ -98,8 +107,12 @@
   50%      { transform: scaleX(0.8); opacity: 0.6; }
 }
 @keyframes mascote-piscar {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95%           { transform: scaleY(0.1); }
+  0%, 92%, 98%, 100% { transform: scaleY(1); }
+  94%, 96%           { transform: scaleY(0); }
+}
+@keyframes mascote-palpebra {
+  0%, 92%, 98%, 100% { opacity: 0; }
+  94%, 96%           { opacity: 1; }
 }
 @keyframes mascote-luz {
   0%, 49% { opacity: 1; }
@@ -163,7 +176,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mascote svg, .mascote .olhos, .mascote .antena-luz, .mascote .luz-peito,
+  .mascote svg, .mascote .olhos, .mascote .palpebras, .mascote .antena-luz, .mascote .luz-peito,
   .mascote .braco-dir, .mascote .fagulhas, .mascote__sombra { animation: none; }
   .mascote__z { animation: none; opacity: 1; }
 }
