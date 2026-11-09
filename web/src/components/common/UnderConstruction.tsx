@@ -1,3 +1,5 @@
+'use client'
+
 import { ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
 import Mascote from '@/components/Mascot/Menon'
 
@@ -64,12 +66,11 @@ export function UnderConstruction({
             }}
           >
             <Code2 className="size-4" style={{ color: 'var(--icon-primary)' }} />
-            GitHub
-            <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--icon-tertiary)' }} />
+            <span>GitHub</span>
           </a>
 
           <a
-            href="https://linkedin.com/in/fabiosantanarp"
+            href="https://fabiosantana.dev"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm transition-all duration-300"
@@ -88,8 +89,7 @@ export function UnderConstruction({
             }}
           >
             <Globe className="size-4" style={{ color: 'var(--icon-primary)' }} />
-            LinkedIn
-            <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--icon-tertiary)' }} />
+            <span>Portfólio</span>
           </a>
 
           <a
@@ -110,15 +110,21 @@ export function UnderConstruction({
             }}
           >
             <Mail className="size-4" style={{ color: 'var(--icon-primary)' }} />
-            Contact
-            <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" style={{ color: 'var(--icon-tertiary)' }} />
+            <span>Contato</span>
           </a>
         </div>
 
-        <div className="w-full border-t pt-10" style={{ borderColor: 'var(--border-tertiary)' }}>
-          <p className="text-xs" style={{ color: 'var(--text-quaternary)' }}>
-            &copy; 2026 Built by Fabio Santana.
-          </p>
+        <div
+          className="flex items-center gap-2 rounded-full border px-4 py-2 text-xs"
+          style={{
+            borderColor: 'var(--border-tertiary)',
+            backgroundColor: 'var(--bg-secondary)',
+            color: 'var(--text-secondary)',
+          }}
+        >
+          <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Desenvolvendo nova interface • Previsão em breve</span>
+          <ArrowRight className="size-3" />
         </div>
       </div>
     </main>

@@ -27,3 +27,22 @@ O portfólio precisava de uma API robusta para gerenciamento de projetos com sin
    - Rotas de mutação (`/api/admin/**`) protegidas por HTTP Basic Auth configurável por `ADMIN_USER` e `ADMIN_PASSWORD`.
 6. **Resiliência do Front-end**:
    - Criação de `useProjects()` hook em React que busca da API `/api/projects` e faz fallback transparente para os dados mockados em `web/src/data/projects.ts` se a API ou banco estiverem indisponíveis.
+
+## 2026-11-09: Migração do Front-end para Next.js (App Router)
+
+### Context
+O front-end utilizava Vite com SPA pura (`react-router-dom`), sem renderização no servidor (SSR) nem otimizações automáticas de SEO e imagens. A necessidade de suporte a SSR, prefetch inteligente de rotas, metadados dinâmicos e deploy facilitado motivou a migração para Next.js.
+
+### Decisions
+1. **Next.js 16 + React 19 + App Router**:
+   - Adoção da estrutura baseada em pastas em `src/app/` (`layout.tsx`, `page.tsx`, `not-found.tsx`).
+   - As antigas telas foram organizadas como visualizações modulares em `src/views/` para evitar colisão com o Pages Router legado.
+2. **Tailwind CSS v4 via PostCSS**:
+   - Migração do `@tailwindcss/vite` para `@tailwindcss/postcss` com `postcss.config.mjs`.
+3. **Segurança de SSR e Hidratação**:
+   - Sincronização segura de tema no `ThemeContext` com fallback em SSR e checagem de `typeof window !== 'undefined'`.
+   - Script inline no `<head>` do `RootLayout` para prevenção de flicker (FOUC) com `suppressHydrationWarning`.
+4. **Variáveis de Ambiente**:
+   - Migração de `VITE_*` e `import.meta.env` para `NEXT_PUBLIC_*` e `process.env`.
+5. **Otimização de Imagens**:
+   - Adoção do `next/image` nos cards de projetos (`ProjectCard.tsx`) com suporte configurado a domínios remotos (Unsplash).

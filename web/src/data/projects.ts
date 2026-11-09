@@ -1,4 +1,4 @@
-import type { ProjectCardProps } from '@/pages/projects/components/Card/ProjectCard'
+import type { ProjectCardProps } from '@/views/projects/components/Card/ProjectCard'
 
 export const mockProjects: ProjectCardProps[] = [
   {

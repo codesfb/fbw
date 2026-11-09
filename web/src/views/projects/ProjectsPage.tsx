@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import Navbar from '@/components/Navbar'
-import ProjectCard from '@/pages/projects/components/Card/ProjectCard'
+import ProjectCard from '@/views/projects/components/Card/ProjectCard'
 import { NotificationContainer } from '@/components/ui/Notification'
 import { useProjects } from '@/hooks/useProjects'
 import { useNotifications } from '@/hooks/useNotifications'

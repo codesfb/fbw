@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Home } from '@/pages/home/Home'
+import { Home } from '@/views/home/Home'
 
 export const metadata: Metadata = {
   title: 'Experiências — Fabio Santana',

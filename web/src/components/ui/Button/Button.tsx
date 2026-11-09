@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode, type CSSProperties } from 'react'
 
 export type ButtonVariant = 'glass' | 'solid' | 'black'

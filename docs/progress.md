@@ -1,5 +1,23 @@
 # Progress Log
 
+## 2026-11-09
+
+### ✅ Migração Front-end: Vite + React para Next.js 16 (App Router)
+- **Framework**: Migrado com sucesso de Vite + `react-router-dom` para Next.js 16 (App Router) com React 19.
+- **Rotas**:
+  - `/` (`src/app/page.tsx`)
+  - `/projetos` (`src/app/projetos/page.tsx`)
+  - `/contato`, `/experiencias`, `/blog`, `/sobre`
+  - `/em-construcao` (`src/app/em-construcao/page.tsx`)
+  - `not-found` com redirect para `/`
+- **Tailwind CSS v4**: Integrado com `@tailwindcss/postcss` e `postcss.config.mjs`.
+- **Imagens**: Migração de tags `<img>` para `next/image` nos cards de projetos (`ProjectCard.tsx`).
+- **SSR & Hidratação**: `ThemeContext` adaptado com verificações de SSR e script inline anti-flicker em `RootLayout`.
+- **Limpeza**: Removidos `vite.config.ts`, `index.html`, `main.tsx`, `App.tsx` e dependências não utilizadas (`vite`, `react-router-dom`, etc.).
+- **Build & Lint**: `npm run build` e `npm run lint` executados com sucesso (100% estático/SSG compilado).
+
+---
+
 ## 2026-11-04
 
 ### ✅ Endpoint de Importação do GitHub Implementado

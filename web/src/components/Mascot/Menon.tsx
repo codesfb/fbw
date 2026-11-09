@@ -1,3 +1,5 @@
+'use client'
+
 import './Menon.css'
 
 type MascoteEstado = 'idle' | 'dormindo' | 'trabalhando' | 'falando' | 'pensando'

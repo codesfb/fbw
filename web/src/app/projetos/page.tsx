@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ProjetosPage } from '@/pages/projects/ProjectsPage'
+import { ProjetosPage } from '@/views/projects/ProjectsPage'
 
 export const metadata: Metadata = {
   title: 'Projetos — Fabio Santana',
