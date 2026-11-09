@@ -1,4 +1,4 @@
-import Navbar from '@/app/layout/Navbar/Navbar'
+import Navbar from '@/components/Navbar'
 import UnderConstruction from '@/components/common/UnderConstruction'
 
 type PageProps = {

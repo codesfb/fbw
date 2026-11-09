@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 import { X, CheckCircle2, AlertCircle, Wifi, WifiOff } from 'lucide-react'
 

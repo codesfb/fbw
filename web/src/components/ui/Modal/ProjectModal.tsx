@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 import { X, BookOpen, ExternalLink, Code2 } from 'lucide-react'
 

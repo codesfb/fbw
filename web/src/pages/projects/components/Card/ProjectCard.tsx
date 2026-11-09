@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef, useRef, useState, type ReactNode, type CSSProperties } from 'react'
 import {
   Code2,
