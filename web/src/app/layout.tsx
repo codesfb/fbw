@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Roboto_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { FloatingMascot } from '@/components/Mascot/FloatingMascot'
 import '@/index.css'
 
 const robotoMono = Roboto_Mono({
@@ -39,7 +40,10 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <FloatingMascot />
+        </ThemeProvider>
       </body>
     </html>
   )
