@@ -1,6 +1,7 @@
 'use client'
 
 import { forwardRef, useRef, useState, type ReactNode, type CSSProperties } from 'react'
+import Image from 'next/image'
 import {
   Code2,
   ExternalLink,
@@ -191,11 +192,12 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
             )}
 
             {media?.type === 'image' && (
-              <img
+              <Image
                 src={media.src}
                 alt={media.alt || `Imagem do projeto ${title}`}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             )}
 
