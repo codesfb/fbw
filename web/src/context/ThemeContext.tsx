@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState, type ReactNode } from 'react'
 import { ThemeContext, type ThemeContextType } from './theme-context'
 
@@ -6,13 +8,21 @@ type Theme = 'light' | 'dark'
 const STORAGE_KEY = 'theme'
 
 function getInitialTheme(): Theme {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark') {
-    return stored
+  if (typeof window === 'undefined') {
+    return 'light'
   }
 
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark'
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'light' || stored === 'dark') {
+      return stored
+    }
+
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark'
+    }
+  } catch {
+    // localStorage can be inaccessible in some iframe/security modes
   }
 
   return 'light'
@@ -27,7 +37,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    localStorage.setItem(STORAGE_KEY, theme)
+    try {
+      localStorage.setItem(STORAGE_KEY, theme)
+    } catch {
+      // ignore storage write errors
+    }
   }, [theme])
 
   const toggleTheme = () => {
