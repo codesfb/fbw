@@ -47,7 +47,7 @@ export function UnderConstruction({
 
         <div className="mb-12 flex flex-wrap justify-center gap-4">
           <a
-            href="https://github.com/fabiosantanarp"
+            href="https://github.com/codesfb"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm transition-all duration-300"
@@ -123,7 +123,7 @@ export function UnderConstruction({
           }}
         >
           <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Desenvolvendo nova interface • Previsão em breve</span>
+          <span>Em desenvolvimento • Previsão em breve</span>
           <ArrowRight className="size-3" />
         </div>
       </div>
