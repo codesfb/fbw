@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
-import Mascote from '@/components/Mascot/Menon'
+import MascotWithGears from '@/components/Mascot/MascotWithGears'
 
 type UnderConstructionProps = {
   pageName?: string
@@ -27,7 +27,7 @@ export function UnderConstruction({
             transformOrigin: 'center',
           }}
         >
-          <Mascote estado="trabalhando" tamanho={70} />
+          <MascotWithGears size={70} />
          
         </div>
 

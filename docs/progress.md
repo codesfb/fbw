@@ -16,6 +16,10 @@
 - **Limpeza**: Removidos `vite.config.ts`, `index.html`, `main.tsx`, `App.tsx` e dependências não utilizadas (`vite`, `react-router-dom`, etc.).
 - **Build & Lint**: `npm run build` e `npm run lint` executados com sucesso (100% estático/SSG compilado).
 
+### ✅ Engrenagens ao lado do mascote
+- Adicionadas duas engrenagens do SVG da branch `old` ao lado do mascote na página inicial e em `/em-construcao`.
+- As engrenagens giram em sentidos opostos e respeitam a preferência por movimento reduzido.
+
 ---
 
 ## 2026-11-04

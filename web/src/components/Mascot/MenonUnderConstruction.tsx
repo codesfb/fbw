@@ -1,4 +1,4 @@
-import Mascote from './Menon'
+import MascotWithGears from './MascotWithGears'
 import './MenonUnderConstruction.css'
 
 interface PaginaConstrucaoProps {
@@ -16,8 +16,7 @@ export default function PaginaConstrucao({
 
       <section className="construcao__conteudo">
         <div className="construcao__grupo">
-          <Mascote estado="trabalhando" tamanho={180} />
-          <span className="construcao__engrenagem" aria-hidden="true" />
+          <MascotWithGears size={180} />
         </div>
         <h1>{titulo}</h1>
         <p>{mensagem}</p>
