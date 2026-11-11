@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import UnderConstruction from '@/components/common/UnderConstruction'
+import { ContactPage } from '@/views/contact/ContactPage'
 
 export const metadata: Metadata = {
   title: 'Contato — Fabio Santana',
@@ -13,10 +13,7 @@ export default function ContatoPage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="flex-1">
-        <UnderConstruction
-          pageName="Contato"
-          description="Canais diretos e formulário para contato."
-        />
+        <ContactPage />
       </div>
       <Footer />
     </div>
