@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import ProjectCard from '@/views/projects/components/Card/ProjectCard'
 import { NotificationContainer } from '@/components/ui/Notification'
 import { useProjects } from '@/hooks/useProjects'
@@ -74,6 +75,7 @@ export function ProjetosPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   )
 }

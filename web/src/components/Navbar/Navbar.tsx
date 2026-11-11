@@ -1,194 +1,337 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { Search, Moon, Sun } from 'lucide-react'
-import Button from '@/components/ui/Button'
+import { Moon, Sun, Menu, X, ArrowUpRight } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
 
-export type SitePage = 'projetos' | 'contato' | 'experiencias' | 'blog' | 'sobre'
+export type NavItemKey = 'inicio' | 'sobre' | 'projetos' | 'blog' | 'contato' | 'login'
 
-type NavbarProps = {
-  activePage?: SitePage
-  onNavigate?: (page: SitePage) => void
-  onLoginClick?: () => void
+export interface NavLink {
+  id: NavItemKey
+  label: string
+  path: string
+  hash: string
+  isSectionOnHome: boolean
 }
 
-const links: { label: string; page: SitePage }[] = [
-  { label: 'Projetos', page: 'projetos' },
-  { label: 'Contato', page: 'contato' },
-  { label: 'Experiências', page: 'experiencias' },
-  { label: 'Blog', page: 'blog' },
-  { label: 'Sobre', page: 'sobre' },
+export const navLinks: NavLink[] = [
+  { id: 'inicio', label: 'Home', path: '/', hash: '#inicio', isSectionOnHome: true },
+  { id: 'sobre', label: 'Sobre', path: '/sobre', hash: '#sobre', isSectionOnHome: true },
+  { id: 'projetos', label: 'Projetos', path: '/projetos', hash: '#projetos', isSectionOnHome: true },
+  { id: 'blog', label: 'Blog', path: '/blog', hash: '#blog', isSectionOnHome: false },
+  { id: 'contato', label: 'Contato', path: '/contato', hash: '#contato', isSectionOnHome: true },
+  { id: 'login', label: 'Login', path: '/login', hash: '#login', isSectionOnHome: false },
 ]
 
-export function Navbar({ activePage, onNavigate, onLoginClick }: NavbarProps) {
+function getActiveFromPath(pathname: string | null): NavItemKey {
+  if (!pathname || pathname === '/') return 'inicio'
+  const match = navLinks.find((item) => item.path === pathname)
+  if (match) return match.id
+  const clean = pathname.replace(/^\//, '').split('/')[0]
+  const fallback = navLinks.find((item) => item.id === clean)
+  return fallback ? fallback.id : 'inicio'
+}
+
+export function Navbar() {
   const { theme, toggleTheme } = useTheme()
-  const [scrolled, setScrolled] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
-  // Determina a página ativa a partir da rota atual se não for passada explicitamente
-  const currentPath = (pathname ? pathname.replace(/^\//, '') : '') as SitePage
-  const currentPage = activePage || currentPath || 'projetos'
+  const isHome = pathname === '/'
+  const [homeActiveSection, setHomeActiveSection] = useState<NavItemKey>('inicio')
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const activeId: NavItemKey = isHome ? homeActiveSection : getActiveFromPath(pathname)
+
+  // Medidas para a linha deslizante
+  const navContainerRef = useRef<HTMLDivElement>(null)
+  const buttonRefs = useRef<{ [key in NavItemKey]?: HTMLButtonElement | HTMLAnchorElement | null }>({})
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  })
+
+  // Detecta rolagem para alterar o estilo do header
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handlePageClick = (page: SitePage) => {
-    if (onNavigate) {
-      onNavigate(page)
-    } else {
-      router.push(`/${page}`)
+  // Scrollspy com IntersectionObserver na Home
+  useEffect(() => {
+    if (!isHome) return
+
+    const sectionIds: NavItemKey[] = ['inicio', 'sobre', 'projetos', 'contato']
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+
+    if (elements.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Encontra a seção com maior interseção visível
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting)
+        if (visibleEntries.length > 0) {
+          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+          const targetId = visibleEntries[0].target.id as NavItemKey
+          setHomeActiveSection(targetId)
+
+          // Atualiza hash na URL sem acionar reload
+          if (window.location.hash !== `#${targetId}`) {
+            window.history.replaceState(null, '', `#${targetId}`)
+          }
+        }
+      },
+      {
+        rootMargin: '-20% 0px -40% 0px',
+        threshold: [0.1, 0.3, 0.6],
+      }
+    )
+
+    elements.forEach((el) => observer.observe(el))
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el))
     }
+  }, [isHome])
+
+  // Atualiza posição da linha deslizante (sliding indicator)
+  const updateIndicator = useCallback(() => {
+    const activeButton = buttonRefs.current[activeId]
+    const container = navContainerRef.current
+
+    if (activeButton && container) {
+      const containerRect = container.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+
+      setIndicatorStyle({
+        left: buttonRect.left - containerRect.left + 8,
+        width: Math.max(buttonRect.width - 16, 16),
+        opacity: 1,
+      })
+    } else {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }))
+    }
+  }, [activeId])
+
+  useEffect(() => {
+    updateIndicator()
+
+    // Recalcula depois que as fontes carregarem, pois a largura dos itens muda
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(updateIndicator).catch(() => {})
+    }
+
+    window.addEventListener('resize', updateIndicator)
+    return () => window.removeEventListener('resize', updateIndicator)
+  }, [updateIndicator])
+
+  // Trata clique nos links
+  const handleItemClick = (item: NavLink) => {
+    setMobileMenuOpen(false)
+
+    if (isHome && item.isSectionOnHome) {
+      const targetElement = document.getElementById(item.id)
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' })
+        window.history.replaceState(null, '', `#${item.id}`)
+        setHomeActiveSection(item.id)
+      }
+      return
+    }
+
+    // Fora da Home, ou destinos que não são seções da Home: navega para a rota real
+    router.push(item.path)
   }
 
-  const handleLogoClick = () => {
-    router.push('/')
-  }
+  // Cor da linha deslizante:
+  // - Na Home (preview de seção): cinza
+  // - Na página real: alto contraste (preto no tema claro, branco no escuro)
+  const indicatorColor = isHome ? 'var(--text-tertiary)' : 'var(--border-primary)'
 
   return (
     <header
-      className={`sticky top-0 z-30 px-2 pt-2 transition-all duration-300 sm:px-6 ${
-        scrolled ? 'backdrop-blur-xl shadow-[0_1px_0_0_var(--shadow-secondary)]' : ''
+      className={`sticky top-0 z-40 w-full transition-all duration-300 font-mono ${
+        scrolled
+          ? 'backdrop-blur-xl shadow-[0_1px_0_0_var(--shadow-secondary)]'
+          : 'bg-transparent'
       }`}
       style={{
-        backgroundColor: 'var(--bg-page)',
+        backgroundColor: scrolled ? 'var(--bg-elevated)' : 'var(--bg-page)',
       }}
     >
-      <div className="mx-auto flex flex-col gap-2 p-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+        {/* Logotipo / Nome com role de apresentação */}
         <button
-          aria-label="Ir para a página inicial"
-          className="flex cursor-pointer items-center gap-3 text-left transition-opacity hover:opacity-80"
-          onClick={handleLogoClick}
+          onClick={() => {
+            if (isHome) {
+              const el = document.getElementById('inicio')
+              if (el) el.scrollIntoView({ behavior: 'smooth' })
+              window.history.replaceState(null, '', '/')
+              setHomeActiveSection('inicio')
+            } else {
+              router.push('/')
+            }
+          }}
           type="button"
+          aria-label="Fabio Santana - Início"
+          className="group flex cursor-pointer items-center gap-2 text-left outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[var(--border-primary)] rounded-md px-1"
         >
-          <span>
-            <strong className="block text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
               Fabio Santana
-            </strong>
-            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+            </span>
+            <span className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>
               Software Developer
             </span>
-          </span>
+          </div>
         </button>
 
+        {/* Menu Desktop com Linha Deslizante */}
         <nav
+          ref={navContainerRef}
           aria-label="Navegação principal"
-          className="order-3 flex w-full items-center justify-center gap-1 overflow-x-auto rounded-lg border p-1 backdrop-blur-xl transition-all duration-300 sm:order-none sm:w-auto"
+          className="relative hidden items-center rounded-xl border p-1 backdrop-blur-xl transition-all duration-300 md:flex"
           style={{
             backgroundColor: 'var(--bg-elevated)',
-            borderColor: 'var(--border-transparent)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border-primary)'
-            e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border-transparent)'
-            e.currentTarget.style.boxShadow = 'none'
+            borderColor: 'var(--border-tertiary)',
           }}
         >
-          {links.map(({ label, page }) => {
-            const isActive = currentPage === page
+          {/* Linha Deslizante (Sliding Indicator) */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-1 h-[2px] rounded-full transition-all duration-300 ease-out"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+              backgroundColor: indicatorColor,
+              opacity: indicatorStyle.opacity,
+            }}
+          />
+
+          {navLinks.map((item) => {
+            const isActive = activeId === item.id
             return (
               <button
-                aria-current={isActive ? 'page' : undefined}
-                className="cursor-pointer px-2 py-1 text-[10px] transition sm:px-8 sm:text-xs"
-                style={{
-                  color: isActive ? 'var(--text-tertiary)' : 'var(--text-primary)',
+                key={item.id}
+                ref={(node) => {
+                  buttonRefs.current[item.id] = node
                 }}
-                key={page}
-                onClick={() => handlePageClick(page)}
+                onClick={() => handleItemClick(item)}
                 type="button"
+                aria-current={isActive ? 'true' : undefined}
+                className="group relative cursor-pointer px-3.5 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary)] rounded-lg"
+                style={{
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                }}
               >
+                <span>{item.label}</span>
+
+                {/* Linha cinza clara no hover */}
                 <span
-                  className="border-b-2 pb-0.5 transition"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-1 left-2 right-2 h-[1px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                   style={{
-                    borderColor: isActive ? 'var(--border-primary)' : 'transparent',
+                    backgroundColor: 'var(--border-secondary)',
                   }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.borderColor = 'var(--border-primary)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.borderColor = 'transparent'
-                    }
-                  }}
-                >
-                  {label}
-                </span>
+                />
               </button>
             )
           })}
         </nav>
 
-        <div className="flex items-center justify-end gap-2 sm:gap-3">
-          <div
-            className="hidden items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-xl transition-all duration-200 sm:flex"
-            style={{
-              backgroundColor: 'var(--bg-elevated)',
-              borderColor: 'var(--border-transparent)',
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-secondary)'
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-transparent)'
-            }}
-          >
-            <Search className="size-5 shrink-0" style={{ color: 'var(--icon-primary)' }} />
-            <input
-              type="text"
-              placeholder="Pesquisar..."
-              className="w-28 bg-transparent text-xs outline-none sm:w-36 sm:text-sm"
-              style={{
-                color: 'var(--text-secondary)',
-              }}
-              readOnly
-            />
-          </div>
-
+        {/* Ações: Alternador de tema & Menu Hamburguer */}
+        <div className="flex items-center gap-2">
+          {/* Botão de Tema */}
           <button
-            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
-            className="cursor-pointer rounded-lg border p-2 backdrop-blur-xl transition-all duration-300"
+            onClick={toggleTheme}
+            type="button"
+            aria-label={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+            className="cursor-pointer rounded-lg border p-2 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary)]"
             style={{
               backgroundColor: 'var(--bg-elevated)',
-              borderColor: 'var(--border-transparent)',
+              borderColor: 'var(--border-tertiary)',
             }}
-            onClick={toggleTheme}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'var(--border-primary)'
-              e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
+              e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-transparent)'
+              e.currentTarget.style.borderColor = 'var(--border-tertiary)'
               e.currentTarget.style.boxShadow = 'none'
             }}
-            type="button"
           >
             {theme === 'dark' ? (
-              <Sun className="size-5" style={{ color: 'var(--icon-primary)' }} />
+              <Sun className="size-4" style={{ color: 'var(--icon-primary)' }} />
             ) : (
-              <Moon className="size-5" style={{ color: 'var(--icon-primary)' }} />
+              <Moon className="size-4" style={{ color: 'var(--icon-primary)' }} />
             )}
           </button>
 
-          <Button
-            size="md"
-            variant="glass"
-            className="hidden sm:inline-flex"
-            onClick={() => onLoginClick?.()}
+          {/* Botão Hamburguer no Mobile */}
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            type="button"
+            aria-label={mobileMenuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'}
+            aria-expanded={mobileMenuOpen}
+            className="cursor-pointer rounded-lg border p-2 backdrop-blur-xl transition-all duration-200 md:hidden outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary)]"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              borderColor: 'var(--border-tertiary)',
+            }}
           >
-            Login
-          </Button>
+            {mobileMenuOpen ? (
+              <X className="size-4" style={{ color: 'var(--icon-primary)' }} />
+            ) : (
+              <Menu className="size-4" style={{ color: 'var(--icon-primary)' }} />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Menu Gaveta Responsivo no Mobile */}
+      {mobileMenuOpen && (
+        <div
+          role="dialog"
+          aria-label="Menu móvel"
+          className="border-b px-4 py-4 backdrop-blur-xl md:hidden transition-all duration-300"
+          style={{
+            backgroundColor: 'var(--bg-elevated)',
+            borderColor: 'var(--border-secondary)',
+          }}
+        >
+          <nav className="flex flex-col gap-1">
+            {navLinks.map((item) => {
+              const isActive = activeId === item.id
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleItemClick(item)}
+                  type="button"
+                  aria-current={isActive ? 'true' : undefined}
+                  className="flex items-center justify-between rounded-lg px-3 py-2.5 text-xs font-medium transition-colors text-left"
+                  style={{
+                    backgroundColor: isActive ? 'var(--bg-secondary)' : 'transparent',
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  }}
+                >
+                  <span>{item.label}</span>
+                  {!item.isSectionOnHome && (
+                    <ArrowUpRight className="size-3" style={{ color: 'var(--text-tertiary)' }} />
+                  )}
+                </button>
+              )
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   )
 }

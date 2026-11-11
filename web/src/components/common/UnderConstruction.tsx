@@ -1,7 +1,9 @@
 'use client'
 
-import { ArrowRight, Mail, Globe, Code2 } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowLeft, ArrowRight, Mail, Code2 } from 'lucide-react'
 import MascotWithGears from '@/components/Mascot/MascotWithGears'
+import Button from '@/components/ui/Button'
 
 type UnderConstructionProps = {
   pageName?: string
@@ -10,10 +12,10 @@ type UnderConstructionProps = {
 
 export function UnderConstruction({
   pageName,
-  description = 'A better version is being developed right now.',
+  description = 'Uma nova versão está sendo desenvolvida com muito carinho.',
 }: UnderConstructionProps) {
   return (
-    <main className="mx-auto max-w-3xl px-6 pt-15 pb-12">
+    <main className="mx-auto max-w-3xl px-6 pt-16 pb-16 font-mono">
       <div className="flex flex-col items-center text-center">
         <div
           className="page-enter"
@@ -23,34 +25,40 @@ export function UnderConstruction({
             justifyContent: 'center',
             gap: 12,
             marginBottom: 20,
-            transform: 'scale(0.82)',
+            transform: 'scale(0.9)',
             transformOrigin: 'center',
           }}
         >
-          <MascotWithGears size={70} />
-         
+          <MascotWithGears size={80} />
         </div>
 
         <h1 className="mb-3 text-2xl font-bold tracking-tight sm:text-4xl" style={{ color: 'var(--text-primary)' }}>
-          {pageName ? `${pageName} em construção` : 'Under construction'}
+          {pageName ? `${pageName} em construção` : 'Em construção'}
         </h1>
 
-      <p className="mb-8 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
-          Volte e veja o resultado depois.
-        </p>
-
-        <p className="mb-2 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-tertiary)' }}>
+        <p className="mb-2 max-w-md text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-secondary)' }}>
           {description}
         </p>
 
-        
+        <p className="mb-8 max-w-md text-xs leading-relaxed sm:text-sm" style={{ color: 'var(--text-tertiary)' }}>
+          Volte em breve para conferir as novidades.
+        </p>
 
-        <div className="mb-12 flex flex-wrap justify-center gap-4">
+        <div className="mb-8 flex flex-wrap justify-center gap-3">
+          <Link href="/">
+            <Button variant="black" size="md" className="gap-2">
+              <ArrowLeft className="size-4" />
+              <span>Voltar para o Início</span>
+            </Button>
+          </Link>
+        </div>
+
+        <div className="mb-10 flex flex-wrap justify-center gap-3">
           <a
             href="https://github.com/codesfb"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm transition-all duration-300"
+            className="group flex items-center gap-2 rounded-lg border px-4 py-2 text-xs transition-all duration-300"
             style={{
               backgroundColor: 'var(--bg-elevated-solid)',
               borderColor: 'var(--border-transparent)',
@@ -65,36 +73,13 @@ export function UnderConstruction({
               e.currentTarget.style.boxShadow = 'none'
             }}
           >
-            <Code2 className="size-4" style={{ color: 'var(--icon-primary)' }} />
+            <Code2 className="size-3.5" style={{ color: 'var(--icon-primary)' }} />
             <span>GitHub</span>
           </a>
 
           <a
-            href="https://fabiosantana.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm transition-all duration-300"
-            style={{
-              backgroundColor: 'var(--bg-elevated-solid)',
-              borderColor: 'var(--border-transparent)',
-              color: 'var(--text-primary)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-primary)'
-              e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-transparent)'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            <Globe className="size-4" style={{ color: 'var(--icon-primary)' }} />
-            <span>Portfólio</span>
-          </a>
-
-          <a
             href="mailto:contato@fabiosantana.dev"
-            className="group flex items-center gap-2 rounded-lg border px-5 py-2.5 text-sm transition-all duration-300"
+            className="group flex items-center gap-2 rounded-lg border px-4 py-2 text-xs transition-all duration-300"
             style={{
               backgroundColor: 'var(--bg-elevated-solid)',
               borderColor: 'var(--border-transparent)',
@@ -109,7 +94,7 @@ export function UnderConstruction({
               e.currentTarget.style.boxShadow = 'none'
             }}
           >
-            <Mail className="size-4" style={{ color: 'var(--icon-primary)' }} />
+            <Mail className="size-3.5" style={{ color: 'var(--icon-primary)' }} />
             <span>Contato</span>
           </a>
         </div>

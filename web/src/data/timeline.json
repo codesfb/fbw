@@ -1,0 +1,39 @@
+[
+  {
+    "id": "marketing",
+    "period": "[anos]",
+    "title": "Marketing Digital & Copywriting",
+    "organization": "Freelancer",
+    "description": "Cerca de 6 anos como copywriter freelancer e gestor de tráfego, escrevendo conteúdo, planejando campanhas e cuidando da comunicação de marcas.",
+    "tags": ["Copywriting", "Gestão de Tráfego", "Comunicação"],
+    "todo": "Informar o intervalo de anos (ex.: 2017 - 2023) e, se quiser, os principais clientes."
+  },
+  {
+    "id": "ifsp-ingresso",
+    "period": "[ano de ingresso] - 2028",
+    "title": "Bacharelado em Engenharia de Software",
+    "organization": "IFSP - Campus São Carlos",
+    "description": "Ingresso no curso de Engenharia de Software, com foco em fundamentos da computação, estruturas de dados, algoritmos e arquitetura de sistemas. Previsão de conclusão em 2028.",
+    "tags": ["Engenharia de Software", "Algoritmos", "Estrutura de Dados"],
+    "todo": "Informar o ano de ingresso no IFSP."
+  },
+  {
+    "id": "academic-work",
+    "period": "[período]",
+    "title": "Contribuições e trabalhos durante o curso",
+    "organization": "IFSP / Projetos práticos",
+    "description": "Projetos acadêmicos e contribuições ao longo da graduação: [itens].",
+    "tags": ["Java", "Spring Boot", "React", "TypeScript"],
+    "todo": "Listar os trabalhos, iniciações, extensões e contribuições relevantes do período."
+  },
+  {
+    "id": "agora",
+    "period": "Atualmente",
+    "title": "Agora: o que estou desenvolvendo",
+    "organization": "Projetos independentes & open source",
+    "description": "Este site (portfólio), o Algorithms Visualizer & Performance Explorer e a ferramenta explain para o terminal, no ecossistema Linux.",
+    "current": true,
+    "tags": ["Algorithms Visualizer", "Este site", "explain CLI", "Linux", "Neovim"],
+    "todo": "Atualizar esta lista conforme os projetos avançarem."
+  }
+]

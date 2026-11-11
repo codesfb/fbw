@@ -1,0 +1,29 @@
+{
+  "greeting": "Oi, eu sou o Fabio! 👋",
+  "role": "Estudante de Engenharia de Software & Desenvolvedor",
+  "location": "São Carlos - SP, Brasil",
+  "bioParagraphs": [
+    "Estudante de Engenharia de Software no IFSP, em São Carlos, e desenvolvedor independente. Gosto de back-end com Java e Spring, de interfaces com React e de viver no terminal (Linux e Neovim).",
+    "Antes de programar, passei cerca de 6 anos no marketing, e levo isso comigo: gosto de construir coisas que funcionam bem e que comunicam bem.",
+    "Fique à vontade para dar uma olhada nos meus projetos e no blog, ou me mandar uma mensagem."
+  ],
+  "socialLinks": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/codesfb",
+      "icon": "github"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/[seu-usuario]",
+      "icon": "linkedin",
+      "todo": "Substituir [seu-usuario] pelo identificador real do LinkedIn."
+    },
+    {
+      "label": "E-mail",
+      "url": "mailto:contato@fabiosantana.dev",
+      "icon": "mail",
+      "todo": "Confirmar o endereço de e-mail definitivo (valor herdado do site anterior)."
+    }
+  ]
+}
