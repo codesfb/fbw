@@ -1,5 +1,22 @@
 # Progress Log
 
+## 2026-11-11
+
+### ✅ Issues #10, #11 e #14 — Layout base, Home, Sobre e Contato
+- **Layout base**: `Navbar` reescrita com Home, Sobre, Projetos, Blog, Contato e Login, menu hambúrguer no mobile, linha indicadora deslizante e `IntersectionObserver` para scrollspy na Home. Hash da URL atualizado via `history.replaceState` (sem reload). Indicador cinza na Home (prévia) e preto/branco nas páginas dedicadas.
+- **Footer global** com e-mail, GitHub (`codesfb`) e LinkedIn, alimentado por `data/about.json`.
+- **Páginas "Em construção"**: `/blog` e `/login` reutilizam `UnderConstruction` com botão de voltar para a Home.
+- **#10 Home**: página única de rolagem com `#inicio`, `#sobre`, `#projetos` e `#contato`, `scroll-margin-top` e `scroll-behavior: smooth`. Hero com foto, apresentação e CTAs; `MascotSlot` com fala fixa e estrutura pronta para IA; prévia da timeline; projetos em destaque via `useProjects()` (API com fallback para os mocks); formulário de contato compartilhado.
+- **#11 Sobre**: página `/sobre` com apresentação, foto, links de redes e timeline vertical alternada (coluna única no mobile) lida de `data/timeline.json`, com o nó "Agora" pulsando.
+- **#14 Contato**: página `/contato` com canais diretos e formulário compartilhado com validação, honeypot, estados de carregamento/sucesso/erro e `sendContact()` mock isolado em `services/contact.ts`.
+- **Acessibilidade e movimento**: `aria-current`, `aria-invalid`/`aria-describedby`, foco visível e `prefers-reduced-motion` respeitado globalmente.
+- **Checks**: `npm run lint`, `npx tsc --noEmit` e `npm run build` executados com sucesso.
+
+### 📝 Pendências de conteúdo
+- Preencher os placeholders `[anos]`, `[ano de ingresso]`, `[período]` e `[itens]` em `web/src/data/timeline.json` (cada item tem um campo `todo`).
+- Substituir `[seu-usuario]` do LinkedIn em `web/src/data/about.json` e confirmar o e-mail de contato.
+- Definir o provedor de envio de e-mail e trocar o mock de `web/src/services/contact.ts`.
+
 ## 2026-11-09
 
 ### ✅ Migração Front-end: Vite + React para Next.js 16 (App Router)
@@ -7,7 +24,7 @@
 - **Rotas**:
   - `/` (`src/app/page.tsx`)
   - `/projetos` (`src/app/projetos/page.tsx`)
-  - `/contato`, `/experiencias`, `/blog`, `/sobre`
+  - `/contato`, `/blog`, `/sobre`
   - `/em-construcao` (`src/app/em-construcao/page.tsx`)
   - `not-found` com redirect para `/`
 - **Tailwind CSS v4**: Integrado com `@tailwindcss/postcss` e `postcss.config.mjs`.
