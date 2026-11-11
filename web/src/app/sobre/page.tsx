@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import UnderConstruction from '@/components/common/UnderConstruction'
+import { AboutPage } from '@/views/about/AboutPage'
 
 export const metadata: Metadata = {
   title: 'Sobre — Fabio Santana',
@@ -13,10 +13,7 @@ export default function SobrePage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <div className="flex-1">
-        <UnderConstruction
-          pageName="Sobre"
-          description="Página detalhada com trajetória completa e timeline interativa em desenvolvimento."
-        />
+        <AboutPage />
       </div>
       <Footer />
     </div>
