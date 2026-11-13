@@ -35,3 +35,8 @@ web/dist/
 # api
 api/target/
 .aider*
+#agents
+.agents/
+.claude/
+.codex/
+skills-lock.json
