@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-import { X, BookOpen, ExternalLink, Code2 } from 'lucide-react'
+import Link from 'next/link'
+import { X, BookOpen, ExternalLink, Code2, ArrowUpRight } from 'lucide-react'
 
 export interface ProjectModalProps {
   isOpen: boolean
@@ -11,6 +12,7 @@ export interface ProjectModalProps {
   description?: string
   repoUrl?: string
   siteUrl?: string
+  fullPageUrl?: string
 }
 
 export function ProjectModal({
@@ -21,6 +23,7 @@ export function ProjectModal({
   description,
   repoUrl,
   siteUrl,
+  fullPageUrl = '/projetos',
 }: ProjectModalProps) {
   // Fecha com ESC e trava o scroll da página enquanto aberto
   useEffect(() => {
@@ -111,15 +114,15 @@ export function ProjectModal({
           </div>
         </div>
 
-        {/* Rodapé com ações */}
+        {/* Rodapé com ações e botão 'Abrir página completa' */}
         <div
-          className="flex items-center justify-between border-t px-5 py-3"
+          className="flex flex-wrap items-center justify-between gap-3 border-t px-5 py-3"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-tertiary)',
           }}
         >
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {repoUrl && (
               <a
                 href={repoUrl}
@@ -170,26 +173,35 @@ export function ProjectModal({
             )}
           </div>
 
-          <button
-            onClick={onClose}
-            type="button"
-            className="cursor-pointer rounded-lg border px-4 py-1.5 text-xs transition-all duration-200"
-            style={{
-              backgroundColor: 'var(--bg-elevated-solid)',
-              borderColor: 'var(--border-transparent)',
-              color: 'var(--text-primary)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-primary)'
-              e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-transparent)'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
-          >
-            Fechar
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href={fullPageUrl}
+              onClick={onClose}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all duration-200 outline-none hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[var(--border-primary)]"
+              style={{
+                backgroundColor: 'var(--text-primary)',
+                color: 'var(--text-inverse)',
+                borderColor: 'var(--border-primary)',
+                boxShadow: 'var(--shadow-hover-sm)',
+              }}
+            >
+              <span>Abrir página completa</span>
+              <ArrowUpRight className="size-3.5" />
+            </Link>
+
+            <button
+              onClick={onClose}
+              type="button"
+              className="cursor-pointer rounded-lg border px-3.5 py-1.5 text-xs transition-all duration-200 outline-none hover:border-[var(--border-primary)] focus-visible:ring-2 focus-visible:ring-[var(--border-primary)]"
+              style={{
+                backgroundColor: 'var(--bg-elevated-solid)',
+                borderColor: 'var(--border-tertiary)',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              Fechar
+            </button>
+          </div>
         </div>
       </div>
     </div>

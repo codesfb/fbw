@@ -17,6 +17,7 @@ import {
   FileText,
 } from 'lucide-react'
 import ProjectModal from '../../../../components/ui/Modal/ProjectModal'
+import { useMascot } from '@/context/MascotContext'
 
 export type ProjectStatus = 'concluido' | 'em-andamento' | 'arquivado'
 
@@ -123,10 +124,12 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
     const videoRef = useRef<HTMLVideoElement>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const currentStatus = statusConfig[status] ?? statusConfig.arquivado
+    const { setHint } = useMascot()
     
     const cardRef = useRef<HTMLElement>(null)
 
     const handleMouseEnter = () => {
+      setHint('Clique no card para abrir a prévia!')
       if (videoRef.current) {
         videoRef.current.play().catch(() => {})
       }
@@ -137,6 +140,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
     }
 
     const handleMouseLeave = () => {
+      setHint(null)
       if (videoRef.current) {
         videoRef.current.pause()
         videoRef.current.currentTime = 0
@@ -144,6 +148,17 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
       if (cardRef.current && !featured) {
         cardRef.current.style.borderColor = 'var(--border-secondary)'
         cardRef.current.style.boxShadow = 'var(--shadow-card)'
+      }
+    }
+
+    const handleCardClick = () => {
+      setIsModalOpen(true)
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        setIsModalOpen(true)
       }
     }
 
@@ -164,9 +179,14 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               ref.current = node
             }
           }}
+          tabIndex={0}
+          role="button"
+          aria-label={`Ver prévia do projeto ${title}`}
+          onClick={handleCardClick}
+          onKeyDown={handleKeyDown}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`group flex flex-col overflow-hidden rounded-lg border font-mono backdrop-blur-xl transition-all duration-300 ${className}`}
+          className={`group flex flex-col overflow-hidden rounded-lg border font-mono backdrop-blur-xl transition-all duration-300 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary)] ${className}`}
           style={cardStyle}
         >
           {/* Mídia (16:9) */}
@@ -231,6 +251,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Visitar site oficial"
+                onClick={(e) => e.stopPropagation()}
                 className="group/visit absolute right-2 bottom-2 z-10 inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-medium backdrop-blur-sm transition-all hover:-translate-y-0.5"
                 style={{
                   backgroundColor: 'var(--bg-elevated-solid)',
@@ -314,6 +335,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="group/btn inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
                 style={{
                   backgroundColor: 'var(--bg-elevated)',
@@ -340,6 +362,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
                   href={downloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="group/btn inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
                   style={{
                     backgroundColor: 'var(--bg-elevated)',
@@ -365,7 +388,10 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               {/* Botão Ler mais que abre o modal */}
               <button
                 type="button"
-                onClick={() => setIsModalOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsModalOpen(true)
+                }}
                 className="group/btn cursor-pointer inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] transition-all"
                 style={{
                   backgroundColor: 'var(--bg-elevated)',
@@ -383,7 +409,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
               >
                 <BookOpen className="size-3" />
                 <span className="border-b border-transparent group-hover/btn:border-[var(--border-primary)]">
-                  Ler mais
+                  Prévia
                 </span>
               </button>
             </div>
@@ -404,6 +430,7 @@ export const ProjectCard = forwardRef<HTMLElement, ProjectCardProps>(
           description={description}
           repoUrl={repoUrl}
           siteUrl={siteUrl}
+          fullPageUrl="/projetos"
         />
       </>
     )
