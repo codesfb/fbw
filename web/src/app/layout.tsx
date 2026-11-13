@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
-import { Roboto_Mono } from 'next/font/google'
+import { Roboto_Mono, Newsreader } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { MascotProvider } from '@/context/MascotContext'
 import { FloatingMascot } from '@/components/Mascot/FloatingMascot'
 import '@/index.css'
 
@@ -9,6 +10,14 @@ const robotoMono = Roboto_Mono({
   weight: ['400', '500', '700'],
   display: 'swap',
   variable: '--font-roboto-mono',
+})
+
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  style: ['italic', 'normal'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+  variable: '--font-serif-elegant',
 })
 
 export const metadata: Metadata = {
@@ -35,14 +44,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={robotoMono.variable}>
+    <html lang="pt-BR" suppressHydrationWarning className={`${robotoMono.variable} ${newsreader.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
         <ThemeProvider>
-          {children}
-          <FloatingMascot />
+          <MascotProvider>
+            {children}
+            <FloatingMascot />
+          </MascotProvider>
         </ThemeProvider>
       </body>
     </html>
