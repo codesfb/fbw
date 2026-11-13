@@ -1,18 +1,24 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight, Code2, BookOpen, MapPin, Sparkles } from 'lucide-react'
+import { ArrowRight, BookOpen, Code2 } from 'lucide-react'
 import fabioImg from '@/assets/fabio.jpg'
-import MascotSlot from '@/components/Mascot/MascotSlot'
 import Button from '@/components/ui/Button'
+import { GithubIcon, LinkedinIcon } from '@/components/common/Icons'
+import aboutData from '@/data/about.json'
+import { useMascot } from '@/context/MascotContext'
 
 export function HeroSection() {
-  const scrollToProjects = () => {
-    const el = document.getElementById('projetos')
+  const { setHint } = useMascot()
+
+  const githubLink = aboutData.socialLinks.find((l) => l.icon === 'github')?.url || 'https://github.com/codesfb'
+  const linkedinLink = aboutData.socialLinks.find((l) => l.icon === 'linkedin')?.url || 'https://www.linkedin.com/in/[seu-usuario]'
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
-      window.history.replaceState(null, '', '#projetos')
+      window.history.replaceState(null, '', `#${id}`)
     }
   }
 
@@ -21,31 +27,23 @@ export function HeroSection() {
       id="inicio"
       className="relative flex min-h-[calc(100vh-80px)] scroll-mt-20 flex-col items-center justify-center px-4 py-12 sm:px-6"
     >
-      <div className="mx-auto flex max-w-4xl flex-col items-center text-center font-mono">
-        {/* Badge de localização / status */}
-        <div
-          className="mb-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs"
-          style={{
-            backgroundColor: 'var(--bg-elevated)',
-            borderColor: 'var(--border-tertiary)',
-            color: 'var(--text-secondary)',
-          }}
-        >
-          <MapPin className="size-3 text-red-500" />
-          <span>São Carlos, SP • Brasil</span>
-          <span className="size-1 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-            Disponível para novos projetos
-          </span>
-        </div>
-
-        {/* Foto de Perfil com moldura neobrutalista */}
-        <div className="relative mb-6">
+      {/* Bloco 'Sobre' do tamanho de um modal, cercado por borda e centralizado na Home */}
+      <div
+        className="relative mx-auto w-full max-w-2xl rounded-2xl border p-6 font-mono backdrop-blur-xl sm:p-8"
+        style={{
+          backgroundColor: 'var(--bg-card)',
+          borderColor: 'var(--border-primary)',
+          boxShadow: 'var(--shadow-modal)',
+        }}
+      >
+        {/* Cabeçalho do modal com foto no canto superior esquerdo e título elegante */}
+        <div className="flex items-start gap-4 sm:gap-5">
+          {/* Minha foto menor, com bordas arredondadas, no canto superior esquerdo */}
           <div
-            className="relative size-28 overflow-hidden rounded-2xl border-2 sm:size-32 transition-transform duration-300 hover:scale-105"
+            className="relative size-16 shrink-0 overflow-hidden rounded-xl border-2 transition-transform duration-300 hover:scale-105 sm:size-20"
             style={{
               borderColor: 'var(--border-primary)',
-              boxShadow: 'var(--shadow-hover)',
+              boxShadow: 'var(--shadow-hover-sm)',
             }}
           >
             <Image
@@ -53,69 +51,99 @@ export function HeroSection() {
               alt="Foto de Fabio Santana"
               fill
               priority
-              sizes="(max-width: 640px) 112px, 128px"
+              sizes="(max-width: 640px) 64px, 80px"
               className="object-cover"
             />
           </div>
-          <div
-            className="absolute -bottom-2 -right-2 rounded-full border p-1"
-            style={{
-              backgroundColor: 'var(--bg-elevated-solid)',
-              borderColor: 'var(--border-primary)',
-            }}
-            title="Desenvolvedor & Engenheiro de Software"
-          >
-            <Sparkles className="size-4 text-amber-500" />
+
+          <div className="flex-1 min-w-0">
+            <span
+              className="text-[11px] font-semibold tracking-wide uppercase"
+              style={{ color: 'var(--text-tertiary)' }}
+            >
+              {aboutData.role}
+            </span>
+
+            {/* Título em fonte elegante, itálica, contrastando com o mono */}
+            <h1
+              className="font-serif-elegant mt-1 text-2xl font-normal italic tracking-tight sm:text-3xl lg:text-4xl leading-tight"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Fabio Santana
+            </h1>
           </div>
         </div>
 
-        {/* Título & Mensagem de Boas-vindas */}
-        <h1
-          className="mb-3 text-3xl font-extrabold tracking-tight sm:text-5xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          Olá, mundo! Eu sou o Fabio.
-        </h1>
-
-        <p
-          className="mb-6 max-w-2xl text-sm leading-relaxed sm:text-base"
+        {/* Texto de apresentação junto ao bloco, discreto (fonte pequena, cor suave) */}
+        <div
+          className="mt-5 space-y-2.5 text-xs sm:text-[13px] leading-relaxed"
           style={{ color: 'var(--text-secondary)' }}
         >
-          Estudante de Engenharia de Software no IFSP e desenvolvedor independente.
-          Construo aplicações web modernas, explorador de sistemas e apaixonado por código limpo,
-          Java, Spring, React e ferramentas de terminal.
-        </p>
-
-        {/* Botões de Ação para Projetos e Blog */}
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
-          <Button
-            variant="black"
-            size="lg"
-            onClick={scrollToProjects}
-            className="gap-2"
-          >
-            <Code2 className="size-4" />
-            <span>Ver Projetos</span>
-            <ArrowRight className="size-4" />
-          </Button>
-
-          <Link href="/blog">
-            <Button
-              variant="glass"
-              size="lg"
-              className="gap-2"
-            >
-              <BookOpen className="size-4" />
-              <span>Explorar o Blog</span>
-            </Button>
-          </Link>
+          <p>
+            Olá! Sou estudante de Engenharia de Software no IFSP e desenvolvedor independente.
+            Gosto de construir back-end robusto com Java e Spring, interfaces funcionais com React e TypeScript,
+            e passar o tempo no terminal com Linux e Neovim.
+          </p>
+          <p>
+            Antes do código, passei cerca de 6 anos no marketing — experiência que levo comigo para criar sistemas que não apenas funcionam com precisão técnica, mas que também comunicam com clareza.
+          </p>
         </div>
 
-        {/* MascotSlot: robô animado com fala fixa estruturado para futura IA */}
-        <div className="w-full max-w-xl">
-          <MascotSlot
-            initialMessage="Bem-vindo ao meu espaço digital! 🤖 Sou o Menon. Navegue pelas seções para me conhecer melhor!"
-          />
+        {/* Botões: GitHub, Ver projetos, Blog, LinkedIn padronizados */}
+        <div
+          className="mt-6 flex flex-wrap items-center gap-2.5 border-t pt-5"
+          style={{ borderColor: 'var(--border-tertiary)' }}
+        >
+          <Button
+            variant="black"
+            size="md"
+            onClick={() => scrollToSection('projetos')}
+            onMouseEnter={() => setHint('Quer ver os projetos em destaque? Clique aqui!')}
+            onMouseLeave={() => setHint(null)}
+            className="gap-2"
+          >
+            <Code2 className="size-3.5" />
+            <span>Ver projetos</span>
+            <ArrowRight className="size-3.5" />
+          </Button>
+
+          <Button
+            variant="glass"
+            size="md"
+            onClick={() => scrollToSection('blog')}
+            onMouseEnter={() => setHint('Explore artigos e pensamentos sobre tecnologia!')}
+            onMouseLeave={() => setHint(null)}
+            className="gap-2"
+          >
+            <BookOpen className="size-3.5" />
+            <span>Blog</span>
+          </Button>
+
+          <a
+            href={githubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setHint('Acesse meus repositórios no GitHub!')}
+            onMouseLeave={() => setHint(null)}
+          >
+            <Button variant="solid" size="md" className="gap-2">
+              <GithubIcon className="size-3.5" />
+              <span>GitHub</span>
+            </Button>
+          </a>
+
+          <a
+            href={linkedinLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setHint('Conecte-se comigo no LinkedIn!')}
+            onMouseLeave={() => setHint(null)}
+          >
+            <Button variant="solid" size="md" className="gap-2">
+              <LinkedinIcon className="size-3.5" />
+              <span>LinkedIn</span>
+            </Button>
+          </a>
         </div>
       </div>
     </section>

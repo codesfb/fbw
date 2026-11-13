@@ -5,6 +5,7 @@ import Footer from '@/components/Footer'
 import HeroSection from '@/views/home/sections/HeroSection'
 import AboutPreviewSection from '@/views/home/sections/AboutPreviewSection'
 import ProjectsPreviewSection from '@/views/home/sections/ProjectsPreviewSection'
+import BlogPreviewSection from '@/views/home/sections/BlogPreviewSection'
 import ContactSection from '@/views/home/sections/ContactSection'
 
 export function Home() {
@@ -15,6 +16,7 @@ export function Home() {
         <HeroSection />
         <AboutPreviewSection />
         <ProjectsPreviewSection />
+        <BlogPreviewSection />
         <ContactSection />
       </main>
       <Footer />

@@ -173,6 +173,10 @@
   --mascote-zzz: #5b5e63;
   --mascote-shadow: rgba(15, 23, 42, 0.22);
 }
+.font-serif-elegant {
+  font-family: var(--font-serif-elegant), 'Newsreader', Georgia, serif;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import { Home } from '@/views/home/Home'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import UnderConstruction from '@/components/common/UnderConstruction'
 
 export const metadata: Metadata = {
   title: 'Experiências — Fabio Santana',
@@ -7,5 +9,16 @@ export const metadata: Metadata = {
 }
 
 export default function ExperienciasPage() {
-  return <Home title="Experiências" description="Minha trajetória profissional, cargos e aprendizados." />
+  return (
+    <div className="flex min-h-screen flex-col font-mono">
+      <Navbar />
+      <div className="flex-1">
+        <UnderConstruction
+          pageName="Experiências"
+          description="Minha trajetória profissional, cargos e aprendizados."
+        />
+      </div>
+      <Footer />
+    </div>
+  )
 }

@@ -19,7 +19,7 @@ export const navLinks: NavLink[] = [
   { id: 'inicio', label: 'Home', path: '/', hash: '#inicio', isSectionOnHome: true },
   { id: 'sobre', label: 'Sobre', path: '/sobre', hash: '#sobre', isSectionOnHome: true },
   { id: 'projetos', label: 'Projetos', path: '/projetos', hash: '#projetos', isSectionOnHome: true },
-  { id: 'blog', label: 'Blog', path: '/blog', hash: '#blog', isSectionOnHome: false },
+  { id: 'blog', label: 'Blog', path: '/blog', hash: '#blog', isSectionOnHome: true },
   { id: 'contato', label: 'Contato', path: '/contato', hash: '#contato', isSectionOnHome: true },
   { id: 'login', label: 'Login', path: '/login', hash: '#login', isSectionOnHome: false },
 ]
@@ -67,7 +67,7 @@ export function Navbar() {
   useEffect(() => {
     if (!isHome) return
 
-    const sectionIds: NavItemKey[] = ['inicio', 'sobre', 'projetos', 'contato']
+    const sectionIds: NavItemKey[] = ['inicio', 'sobre', 'projetos', 'blog', 'contato']
     const elements = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null)
