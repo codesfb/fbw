@@ -46,3 +46,27 @@ O front-end utilizava Vite com SPA pura (`react-router-dom`), sem renderização
    - Migração de `VITE_*` e `import.meta.env` para `NEXT_PUBLIC_*` e `process.env`.
 5. **Otimização de Imagens**:
    - Adoção do `next/image` nos cards de projetos (`ProjectCard.tsx`) com suporte configurado a domínios remotos (Unsplash).
+
+## 2026-11-12: Redesign e Interatividade da Home (Mascote Menon, Modal Sobre, Linha do Tempo e Blog)
+
+### Context
+A página Home necessitava de refinamentos visuais e ergonômicos: um bloco Sobre em formato de modal emoldurado e centralizado, tipografia elegante em itálico para o título, interação viva com o mascote Menon reagindo a eventos e hovers, padronização nos botões e correção de hover bugs, visualização horizontal da linha do tempo com prévia desfocada, alinhamento dimensional dos cards de projetos e uma nova seção de artigos (Blog) com prévia modal.
+
+### Decisions
+1. **Tipografia do Bloco Sobre**:
+   - Introdução da Google Font `Newsreader` (variável `--font-serif-elegant`) com estilo itálico no Next.js App Router para contrastar com o restante da interface monoespaçada.
+2. **Coordenação Global do Mascote Menon via `MascotContext`**:
+   - Criação do `MascotContext` para centralizar estados (`dormindo`, `idle`, `falando`), mensagens de balão (tooltip) e transições temporizadas.
+   - Boas-vindas automáticas ao entrar na Home com retorno suave para o estado dormente.
+   - Mensagens contextuais em hover sobre botões e cards, com retorno ao sono após `mouseleave`.
+   - Acessibilidade preservada em telas de toque através de interação direta no mascote.
+3. **Padronização de Botões e Resolução de Hover**:
+   - Uniformização de alturas e paddings (`sm`: `h-8`, `md`: `h-9`, `lg`: `h-10`).
+   - Substituição de regras conflitantes por tokens semânticos (`var(--text-primary)`, `var(--text-inverse)`, `var(--border-primary)` e `var(--shadow-hover-sm)`), eliminando o bug de desaparecimento em hover.
+4. **Timeline Horizontal com Efeito de Fade/Blur**:
+   - Componente `Timeline` adaptado para suportar `layout="horizontal"`, apresentando um trilho contínuo horizontal com nós pontilhados e suporte a rolagem.
+   - Na Home, uma máscara com `backdrop-blur` esconde os itens finais e exibe o botão "Ver mais" direcionando para a trajetória completa em `/sobre`.
+5. **Navegação com Prévias Modais sem Saída da Home**:
+   - Cards de projetos e posts de blog abrem modais de prévia ao clicar (suportando teclado e fechamento via `Esc`, `X` ou backdrop).
+   - Modais incluem botão de ação secundária "Abrir página completa" para roteamento tradicional.
+   - Seções da Home incluem o botão "Ver tudo →" no cabeçalho.

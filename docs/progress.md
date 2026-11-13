@@ -1,5 +1,17 @@
 # Progress Log
 
+## 2026-11-12
+
+### ✅ Redesign e Interatividade da Home (Mascote Menon, Modal Sobre, Linha do Tempo e Blog)
+- **Modal Sobre na Home**: Bloco centralizado emoldurado com `max-w-2xl`, cantos arredondados, título em fonte elegante itálica (`Newsreader`), foto compacta no canto superior esquerdo e remoção do endereço de São Carlos. Botões padronizados para "Ver projetos", "Blog", "GitHub" e "LinkedIn".
+- **Mascote Menon Dinâmico**: Integrado com `MascotContext`. Ao entrar na Home, desperta com mensagem de boas-vindas ("Olá! Bem-vindo ao meu espaço digital. 👾") e volta a dormir suavemente. Ao passar o mouse sobre botões e cards de projeto/blog, acorda com dicas em balão de fala e retorna ao sono no `mouseleave`. Interativo ao clique em telas touch.
+- **Padronização de Botões e Correção de Hover**: Padronização precisa de alturas (`h-8`, `h-9`, `h-10`), paddings e tipografia mono. Correção do bug onde o botão `black` desaparecia ao passar o mouse.
+- **Linha do Tempo Horizontal**: Implementação de visualização horizontal contínua em `Timeline.tsx` com nós pontilhados e botões de navegação. Na Home (`AboutPreviewSection.tsx`), adicionada máscara com blur gradiente na borda e botão "Ver mais" direcionando para `/sobre`.
+- **Cards de Projetos Idênticos**: A seção de projetos da Home agora utiliza a mesma proporção e o mesmo componente `ProjectCard` da página `/projetos`, exibindo 4 destaques com imagem 16:9, badges e tags.
+- **Nova Seção de Blog na Home**: Criada a seção `#blog` com 3 artigos mockados em `data/blog.ts`, cards técnicos com miniaturas gradiente e contadores de tempo de leitura. Integrada ao Navbar e scrollspy da Home.
+- **Navegação com Prévias Modais**: Cliques em cards de projetos e de blog abrem modais de prévia rápida (`ProjectModal` e `BlogModal`) com suporte a teclado (`Esc`), botão `X`, backdrop click e ação "Abrir página completa". Cabeçalhos de seção possuem botão "Ver tudo →".
+- **Checks**: `npm run lint`, `npx tsc --noEmit` e `npm run build` passaram com sucesso (10 páginas estáticas geradas).
+
 ## 2026-11-11
 
 ### ✅ Issues #10, #11 e #14 — Layout base, Home, Sobre e Contato
