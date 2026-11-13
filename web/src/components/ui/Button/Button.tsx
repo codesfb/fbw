@@ -5,7 +5,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode, type CSSProperti
 export type ButtonVariant = 'glass' | 'solid' | 'black'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   variant?: ButtonVariant
   size?: ButtonSize
@@ -18,26 +18,31 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       variant = 'glass',
       size = 'md',
-      underline = true,
+      underline = false,
       className = '',
       style,
       ...props
     },
     ref
   ) => {
-    const sizeStyles: Record<ButtonSize, string> = {
-      sm: 'px-3 py-1 text-xs',
-      md: 'px-4 py-1.5 text-sm',
-      lg: 'px-6 py-2.5 text-base',
+    // Padronização precisa de alturas, padding e tipografia
+    const sizeClasses: Record<ButtonSize, string> = {
+      sm: 'h-8 px-3 text-[11px]',
+      md: 'h-9 px-4 text-xs',
+      lg: 'h-10 px-5 text-xs',
     }
 
-    const getVariantStyle = (): CSSProperties => {
-      const baseStyle: CSSProperties = {
-        backgroundColor: 'var(--bg-elevated)',
-        color: 'var(--text-primary)',
-        borderColor: 'var(--border-transparent)',
+    const getVariantClasses = (): string => {
+      if (variant === 'black') {
+        return 'border font-semibold shadow-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0'
       }
+      if (variant === 'solid') {
+        return 'border font-medium shadow-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0'
+      }
+      return 'border font-medium shadow-none backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0'
+    }
 
+    const getVariantStyles = (): CSSProperties => {
       if (variant === 'black') {
         return {
           backgroundColor: 'var(--text-primary)',
@@ -45,55 +50,48 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           borderColor: 'var(--border-primary)',
         }
       }
-
       if (variant === 'solid') {
         return {
           backgroundColor: 'var(--bg-elevated-solid)',
           color: 'var(--text-primary)',
-          borderColor: 'var(--border-transparent)',
+          borderColor: 'var(--border-secondary)',
         }
       }
-
-      return baseStyle
+      return {
+        backgroundColor: 'var(--bg-elevated)',
+        color: 'var(--text-primary)',
+        borderColor: 'var(--border-secondary)',
+      }
     }
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (variant === 'black') {
-        e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
-        e.currentTarget.style.boxShadow = 'var(--shadow-secondary)'
-      } else {
+      e.currentTarget.style.boxShadow = 'var(--shadow-hover-sm)'
+      if (variant !== 'black') {
         e.currentTarget.style.borderColor = 'var(--border-primary)'
-        e.currentTarget.style.boxShadow = 'var(--shadow-hover)'
+        e.currentTarget.style.backgroundColor = 'var(--bg-hover)'
       }
+      props.onMouseEnter?.(e)
     }
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const variantStyle = getVariantStyle()
-      e.currentTarget.style.backgroundColor = variantStyle.backgroundColor as string
-      e.currentTarget.style.borderColor = variantStyle.borderColor as string
       e.currentTarget.style.boxShadow = 'none'
+      const base = getVariantStyles()
+      e.currentTarget.style.borderColor = base.borderColor as string
+      e.currentTarget.style.backgroundColor = base.backgroundColor as string
+      props.onMouseLeave?.(e)
     }
 
     return (
       <button
         ref={ref}
-        className={`group inline-flex cursor-pointer items-center justify-center rounded-lg border font-mono backdrop-blur-xl transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${sizeStyles[size]} ${className}`}
-        style={{ ...getVariantStyle(), ...style }}
+        className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg font-mono outline-none focus-visible:ring-2 focus-visible:ring-[var(--border-primary)] disabled:cursor-not-allowed disabled:opacity-50 ${sizeClasses[size]} ${getVariantClasses()} ${className}`}
+        style={{ ...getVariantStyles(), ...style }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}
       >
         {underline ? (
-          <span
-            className="border-b-2 pb-0.5 transition"
-            style={{ borderColor: 'transparent' }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = variant === 'black' ? 'var(--text-inverse)' : 'var(--border-primary)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'transparent'
-            }}
-          >
+          <span className="border-b border-current pb-0.5">
             {children}
           </span>
         ) : (
