@@ -1,17 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, User, Calendar } from 'lucide-react'
+import { ArrowRight, User } from 'lucide-react'
 import Button from '@/components/ui/Button'
-import aboutData from '@/data/about.json'
+import Timeline from '@/components/Timeline'
 import timelineDataRaw from '@/data/timeline.json'
 import type { TimelineItem } from '@/types'
+import { useMascot } from '@/context/MascotContext'
 
 const timelineData = timelineDataRaw as TimelineItem[]
 
 export function AboutPreviewSection() {
-  // Exibe os primeiros 3 a 4 marcos na prévia
-  const previewMilestones = timelineData.slice(0, 4)
+  const { setHint } = useMascot()
 
   return (
     <section
@@ -22,129 +22,93 @@ export function AboutPreviewSection() {
         backgroundColor: 'var(--bg-page)',
       }}
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
         {/* Cabeçalho da Seção */}
-        <div className="mb-10 text-center sm:text-left">
-          <div
-            className="mb-2 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
-            style={{
-              backgroundColor: 'var(--bg-elevated)',
-              borderColor: 'var(--border-tertiary)',
-              color: 'var(--text-tertiary)',
-            }}
-          >
-            <User className="size-3" />
-            <span>Sobre Mim</span>
+        <div className="mb-8 flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+          <div>
+            <div
+              className="mb-2 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
+              style={{
+                backgroundColor: 'var(--bg-elevated)',
+                borderColor: 'var(--border-tertiary)',
+                color: 'var(--text-tertiary)',
+              }}
+            >
+              <User className="size-3" />
+              <span>Trajetória</span>
+            </div>
+            <h2
+              className="text-2xl font-bold tracking-tight sm:text-3xl"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Linha do Tempo
+            </h2>
+            <p className="mt-1 text-xs sm:text-sm" style={{ color: 'var(--text-tertiary)' }}>
+              Do marketing à Engenharia de Software: as etapas que construíram minha bagagem.
+            </p>
           </div>
-          <h2
-            className="text-2xl font-bold tracking-tight sm:text-3xl"
-            style={{ color: 'var(--text-primary)' }}
-          >
-            {aboutData.greeting}
-          </h2>
+
+          <Link href="/sobre" className="hidden sm:inline-flex">
+            <Button
+              variant="black"
+              size="md"
+              className="gap-2"
+              onMouseEnter={() => setHint('Quer ver todos os detalhes da minha trajetória? Clique aqui!')}
+              onMouseLeave={() => setHint(null)}
+            >
+              <span>Ver mais</span>
+              <ArrowRight className="size-4" />
+            </Button>
+          </Link>
         </div>
 
-        {/* Texto de Apresentação lido de about.json */}
-        <div
-          className="mb-12 rounded-xl border p-6 backdrop-blur-xl sm:p-8"
+        {/* Linha do tempo horizontal com efeito de blur na borda direita */}
+        <div className="relative overflow-hidden rounded-2xl border p-4 sm:p-6"
           style={{
             backgroundColor: 'var(--bg-card)',
             borderColor: 'var(--border-secondary)',
             boxShadow: 'var(--shadow-card)',
           }}
         >
-          <div className="flex flex-col gap-4 text-xs leading-relaxed sm:text-sm" style={{ color: 'var(--text-secondary)' }}>
-            {aboutData.bioParagraphs.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+          <Timeline items={timelineData} layout="horizontal" />
+
+          {/* Efeito desfocado (blur) sobre o final da trilha horizontal */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-28 sm:w-44 backdrop-blur-[3px]"
+            style={{
+              background: 'linear-gradient(to left, var(--bg-card) 20%, rgba(255,255,255,0.05) 100%)',
+            }}
+          />
+
+          {/* Botão flutuante sobre a área desfocada */}
+          <div className="absolute inset-y-0 right-4 flex items-center justify-center">
+            <Link href="/sobre">
+              <Button
+                variant="black"
+                size="md"
+                className="gap-2 shadow-lg"
+                onMouseEnter={() => setHint('Quer ver todos os detalhes da minha trajetória? Clique aqui!')}
+                onMouseLeave={() => setHint(null)}
+              >
+                <span>Ver mais</span>
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Prévia da Timeline (3 ou 4 marcos) */}
-        <div className="mb-10">
-          <h3
-            className="mb-6 text-sm font-semibold tracking-wider uppercase text-center sm:text-left"
-            style={{ color: 'var(--text-tertiary)' }}
-          >
-            Principais Marcos
-          </h3>
-
-          <div className="relative border-l-2 pl-6 ml-3 sm:ml-4 flex flex-col gap-8" style={{ borderColor: 'var(--border-secondary)' }}>
-            {previewMilestones.map((item) => (
-              <div key={item.id} className="relative group">
-                {/* Marcador do nó da timeline */}
-                <span
-                  className={`absolute -left-[31px] top-1 size-3.5 rounded-full border-2 transition-transform duration-300 group-hover:scale-125 ${
-                    item.current ? 'bg-emerald-500 animate-pulse' : ''
-                  }`}
-                  style={{
-                    backgroundColor: item.current ? 'var(--status-success)' : 'var(--bg-page)',
-                    borderColor: 'var(--border-primary)',
-                  }}
-                />
-
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span
-                    className="inline-flex items-center gap-1 text-[11px] font-medium"
-                    style={{ color: 'var(--text-tertiary)' }}
-                  >
-                    <Calendar className="size-3" />
-                    {item.period}
-                  </span>
-                  {item.current && (
-                    <span
-                      className="rounded border px-1.5 py-0.2 text-[9px] font-bold"
-                      style={{
-                        backgroundColor: 'var(--status-success-bg)',
-                        borderColor: 'var(--status-success-border)',
-                        color: 'var(--status-success-text)',
-                      }}
-                    >
-                      Em andamento
-                    </span>
-                  )}
-                </div>
-
-                <h4 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-                  {item.title}
-                  {item.organization && (
-                    <span className="font-normal text-xs ml-1.5" style={{ color: 'var(--text-tertiary)' }}>
-                      • {item.organization}
-                    </span>
-                  )}
-                </h4>
-
-                <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  {item.description}
-                </p>
-
-                {item.tags && (
-                  <div className="mt-2.5 flex flex-wrap gap-1.5">
-                    {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded border px-2 py-0.5 text-[10px]"
-                        style={{
-                          backgroundColor: 'var(--bg-elevated)',
-                          borderColor: 'var(--border-tertiary)',
-                          color: 'var(--text-tertiary)',
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Botão Ver Mais -> /sobre */}
-        <div className="flex justify-center sm:justify-start">
+        {/* Botão no Mobile abaixo da caixa */}
+        <div className="mt-6 flex justify-center sm:hidden">
           <Link href="/sobre">
-            <Button variant="black" size="md" className="gap-2">
-              <span>Ver mais sobre mim</span>
+            <Button
+              variant="black"
+              size="md"
+              className="gap-2"
+              onMouseEnter={() => setHint('Quer ver todos os detalhes da minha trajetória? Clique aqui!')}
+              onMouseLeave={() => setHint(null)}
+            >
+              <span>Ver trajetória completa</span>
               <ArrowRight className="size-4" />
             </Button>
           </Link>
